@@ -26,25 +26,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const style = document.createElement('style');
     style.innerHTML = `
         @keyframes slideFadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: scale(0.98) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
         body {
-            animation: slideFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: slideFadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
             cursor: default;
+            background-color: #0B1120;
+            will-change: opacity, transform;
         }
         #presenter-controls {
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             opacity: 0;
-            transform: translate(-50%, 20px);
+            transform: translate(-50%, 20px) scale(0.95);
         }
         #presenter-controls.visible {
             opacity: 1;
-            transform: translate(-50%, 0);
+            transform: translate(-50%, 0) scale(1);
         }
         .nav-btn:hover {
             background: rgba(255, 255, 255, 0.15) !important;
-            transform: scale(1.1);
+            transform: translateY(-2px);
         }
         .nav-btn:active {
             transform: scale(0.9);
@@ -53,11 +55,11 @@ document.addEventListener('DOMContentLoaded', () => {
             position: fixed;
             bottom: 0;
             left: 0;
-            height: 3px;
-            background: #3b82f6;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
             z-index: 10001;
-            transition: width 0.3s ease;
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
         }
 
         /* Horizontal Slide Preview Row (Centered) */
@@ -174,6 +176,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function navigateTo(index) {
         if (index < 1 || index > totalSlides) return;
         const url = index === 1 ? 'index.html' : `slides (${index}).html`;
+
+        // Instant visual feedback for snappier feel
+        document.body.style.opacity = '0';
+        document.body.style.transform = 'translateY(-10px) scale(0.99)';
+        document.body.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+
         window.location.href = url;
     }
 
@@ -275,34 +283,54 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.body.appendChild(controls);
 
-    // 7. Preview Menu Implementation
+    // 7. Preview Menu Implementation (Lazy Loaded)
     const menu = document.createElement('div');
     menu.id = 'slide-menu';
-
-    for (let i = 1; i <= totalSlides; i++) {
-        const item = document.createElement('div');
-        item.className = `menu-item ${i === currentIndex ? 'current' : ''}`;
-
-        // Add Slide Number Badge
-        const badge = document.createElement('div');
-        badge.className = 'slide-num-badge';
-        badge.innerText = i;
-        item.appendChild(badge);
-
-        // Add Live Preview Iframe
-        const iframe = document.createElement('iframe');
-        iframe.className = 'preview-iframe';
-        iframe.src = i === 1 ? 'index.html' : `slides (${i}).html`;
-        iframe.loading = 'lazy'; // Improve performance
-        item.appendChild(iframe);
-
-        item.onclick = (e) => {
-            e.stopPropagation();
-            navigateTo(i);
-        };
-        menu.appendChild(item);
-    }
     document.body.appendChild(menu);
+
+    let menuInitialized = false;
+    function initMenu() {
+        if (menuInitialized) return;
+
+        for (let i = 1; i <= totalSlides; i++) {
+            const item = document.createElement('div');
+            item.className = `menu-item ${i === currentIndex ? 'current' : ''}`;
+
+            // Add Slide Number Badge
+            const badge = document.createElement('div');
+            badge.className = 'slide-num-badge';
+            badge.innerText = i;
+            item.appendChild(badge);
+
+            // Add Live Preview Iframe
+            const iframe = document.createElement('iframe');
+            iframe.className = 'preview-iframe';
+            iframe.src = i === 1 ? 'index.html' : `slides (${i}).html`;
+            iframe.loading = 'lazy';
+            item.appendChild(iframe);
+
+            item.onclick = (e) => {
+                e.stopPropagation();
+                navigateTo(i);
+            };
+            menu.appendChild(item);
+        }
+        menuInitialized = true;
+    }
+
+    // 8. Prefetching for Speed
+    function addPrefetch(index) {
+        if (index < 1 || index > totalSlides) return;
+        const url = index === 1 ? 'index.html' : `slides (${index}).html`;
+        const link = document.createElement('link');
+        link.rel = 'prefetch';
+        link.href = url;
+        document.head.appendChild(link);
+    }
+
+    // Prefetch next and previous
+    addPrefetch(currentIndex + 1);
+    addPrefetch(currentIndex - 1);
 
     // Listeners
     document.getElementById('nav-menu').onclick = (e) => { e.stopPropagation(); toggleMenu(); };
@@ -330,6 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => { if (!menu.classList.contains('active')) controls.classList.remove('visible'); }, 2000);
 
     function toggleMenu() {
+        initMenu(); // Initialize on demand
         menu.classList.toggle('active');
         if (menu.classList.contains('active')) {
             controls.classList.add('visible');
