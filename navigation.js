@@ -38,11 +38,11 @@ document.addEventListener('DOMContentLoaded', () => {
         #presenter-controls {
             transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             opacity: 0;
-            transform: translate(-50%, 20px) scale(0.95);
+            transform: translateY(20px) scale(0.95);
         }
         #presenter-controls.visible {
             opacity: 1;
-            transform: translate(-50%, 0) scale(1);
+            transform: translateY(0) scale(1);
         }
         .nav-btn:hover {
             background: rgba(255, 255, 255, 0.15) !important;
@@ -233,8 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
     controls.style.cssText = `
         position: fixed;
         bottom: 30px;
-        left: 50%;
-        transform: translate(-50%, 0);
+        right: 40px;
         background: rgba(15, 23, 42, 0.85);
         backdrop-filter: blur(15px);
         border: 1px solid rgba(255, 255, 255, 0.1);
