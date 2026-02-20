@@ -26,17 +26,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const style = document.createElement('style');
     style.innerHTML = `
         @keyframes slideFadeIn {
-            from { opacity: 0; transform: scale(0.98) translateY(10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        .slide-container {
-            view-transition-name: slide-wrapper;
+            from { opacity: 0; transform: translate(-50%, -48%) scale(calc(var(--slide-scale, 1) * 0.98)); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(var(--slide-scale, 1)); }
         }
         body {
-            animation: slideFadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
             cursor: default;
             background-color: #0B1120;
-            will-change: opacity, transform;
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .slide-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(var(--slide-scale, 1));
+            transform-origin: center center;
+            animation: slideFadeIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            will-change: transform, opacity;
+            z-index: 1;
         }
         #presenter-controls {
             transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -160,126 +170,42 @@ document.addEventListener('DOMContentLoaded', () => {
             background: #3b82f6;
             border-color: #60a5fa;
         }
+
+        /* Essential Overrides for the Scaling Engine */
+        .slide-container .w-screen { width: 100% !important; }
+        .slide-container .h-screen { height: 100% !important; }
+        .slide-container .min-h-screen { min-height: 100% !important; }
+        .slide-container .min-w-screen { min-width: 100% !important; }
+        .slide-container .fixed, .slide-container .absolute { 
+            /* Ensure absolute/fixed elements inside the slide stay within the 16:9 box */
+        }
     `;
     document.head.appendChild(style);
 
     // 2. Helper to get current index
-    function getSlideIndex(path) {
-        // Handle root, directory paths, and index.html
-        if (path.endsWith('/') || path.endsWith('index.html') || path.endsWith('pitchdeck')) {
-            return 1;
-        }
-
+    function getCurrentSlideIndex() {
+        const path = window.location.pathname;
         const filename = decodeURIComponent(path.substring(path.lastIndexOf('/') + 1));
-        if (filename === 'index.html' || filename === '' || filename === 'pitchdeck') return 1;
-
-        const match = filename.match(/slides\s*\((\d+)\)\.html/i);
+        if (filename === 'index.html' || filename === '') return 1;
+        const match = filename.match(/slides \((\d+)\)\.html/i);
         return match ? parseInt(match[1], 10) : null;
     }
 
-    let currentSlideIndex = getSlideIndex(window.location.pathname);
-    if (currentSlideIndex === null) return;
+    const currentIndex = getCurrentSlideIndex();
+    if (currentIndex === null) return;
 
-    // 3. Seamless SPA-Style Navigation
-    async function navigateTo(index, pushState = true) {
+    // 3. Navigation
+    function navigateTo(index) {
         if (index < 1 || index > totalSlides) return;
-        if (index === currentSlideIndex && pushState) return;
-
         const url = index === 1 ? 'index.html' : `slides (${index}).html`;
-        const isLocalFile = window.location.protocol === 'file:';
 
-        // Update URL - Skip pushState on local file:// to avoid SecurityError
-        if (pushState && !isLocalFile) {
-            try {
-                window.history.pushState({ index }, '', url);
-            } catch (e) {
-                console.warn('History API not available (local file?)');
-            }
-        }
+        // Instant visual feedback for snappier feel
+        document.body.style.opacity = '0';
+        document.body.style.transform = 'translateY(-10px) scale(0.99)';
+        document.body.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
 
-        const performTransition = async () => {
-            try {
-                // Fetch might also fail on some local setups due to CORS
-                const response = await fetch(url);
-                if (!response.ok) throw new Error('Fetch failed');
-
-                const html = await response.text();
-                const parser = new DOMParser();
-                const newDoc = parser.parseFromString(html, 'text/html');
-
-                // Update current index
-                currentSlideIndex = index;
-
-                // 1. Update Title
-                document.title = newDoc.title;
-
-                // 2. Swap Content
-                const newContent = newDoc.querySelector('.slide-container');
-                const oldContainer = document.querySelector('.slide-container');
-
-                if (newContent && oldContainer) {
-                    oldContainer.innerHTML = newContent.innerHTML;
-                    oldContainer.className = newContent.className;
-                } else {
-                    throw new Error('Container not found');
-                }
-
-                // 3. Update Progress Bar
-                if (progressBar) {
-                    progressBar.style.width = `${(currentSlideIndex / totalSlides) * 100}%`;
-                }
-
-                // 4. Update Presenter Controls Text
-                const counter = document.querySelector('#presenter-controls div[style*="min-width: 60px"]');
-                if (counter) {
-                    counter.innerText = `${currentSlideIndex} / ${totalSlides}`;
-                }
-
-                // 5. Update Menu Item Active State
-                document.querySelectorAll('.menu-item').forEach((item, idx) => {
-                    item.classList.toggle('current', (idx + 1) === currentSlideIndex);
-                });
-
-                // 6. Execute Scripts
-                const scripts = newDoc.querySelectorAll('script');
-                scripts.forEach(oldScript => {
-                    if (oldScript.src && (
-                        oldScript.src.includes('navigation.js') ||
-                        oldScript.src.includes('tailwindcss') ||
-                        oldScript.src.includes('echarts')
-                    )) return;
-
-                    const newScript = document.createElement('script');
-                    if (oldScript.src) {
-                        newScript.src = oldScript.src;
-                    } else {
-                        newScript.textContent = oldScript.textContent;
-                    }
-                    document.body.appendChild(newScript);
-                    if (!oldScript.src) newScript.remove();
-                });
-
-            } catch (err) {
-                // Fallback to traditional navigation if SPA fails
-                window.location.href = url;
-            }
-        };
-
-        // Use View Transitions API if available
-        if (document.startViewTransition) {
-            document.startViewTransition(performTransition);
-        } else {
-            performTransition();
-        }
+        window.location.href = url;
     }
-
-    // Handle Browser Back/Forward
-    window.addEventListener('popstate', (e) => {
-        const index = e.state ? e.state.index : getSlideIndex(window.location.pathname);
-        if (index) {
-            navigateTo(index, false);
-        }
-    });
 
     // 4. Input Events
     document.addEventListener('keydown', (e) => {
@@ -290,13 +216,13 @@ document.addEventListener('DOMContentLoaded', () => {
             case ' ':
             case 'PageDown':
             case 'Enter':
-                navigateTo(currentSlideIndex + 1);
+                navigateTo(currentIndex + 1);
                 break;
             case 'ArrowLeft':
             case 'ArrowUp':
             case 'PageUp':
             case 'Backspace':
-                navigateTo(currentSlideIndex - 1);
+                navigateTo(currentIndex - 1);
                 break;
             case 'f':
             case 'F':
@@ -314,13 +240,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('click', (e) => {
         if (e.target.closest('button, a, #presenter-controls, #slide-menu')) return;
-        navigateTo(currentSlideIndex + 1);
+        navigateTo(currentIndex + 1);
     });
 
     // 5. Progress Bar
     const progressBar = document.createElement('div');
     progressBar.id = 'progress-bar';
-    progressBar.style.width = `${(currentSlideIndex / totalSlides) * 100}%`;
+    progressBar.style.width = `${(currentIndex / totalSlides) * 100}%`;
     document.body.appendChild(progressBar);
 
     // 6. UI Controls
@@ -366,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <i class="fas fa-chevron-left"></i>
         </button>
         <div style="color: rgba(255,255,255,1); font-size: 13px; font-weight: 800; font-family: 'Inter', sans-serif; padding: 0 4px; min-width: 60px; text-align: center;">
-            ${currentSlideIndex} / ${totalSlides}
+            ${currentIndex} / ${totalSlides}
         </div>
         <button id="nav-next" class="nav-btn" style="${btnStyle}" title="Next">
             <i class="fas fa-chevron-right"></i>
@@ -389,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (let i = 1; i <= totalSlides; i++) {
             const item = document.createElement('div');
-            item.className = `menu-item ${i === currentSlideIndex ? 'current' : ''}`;
+            item.className = `menu-item ${i === currentIndex ? 'current' : ''}`;
 
             // Add Slide Number Badge
             const badge = document.createElement('div');
@@ -424,13 +350,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Prefetch next and previous
-    addPrefetch(currentSlideIndex + 1);
-    addPrefetch(currentSlideIndex - 1);
+    addPrefetch(currentIndex + 1);
+    addPrefetch(currentIndex - 1);
 
     // Listeners
     document.getElementById('nav-menu').onclick = (e) => { e.stopPropagation(); toggleMenu(); };
-    document.getElementById('nav-prev').onclick = (e) => { e.stopPropagation(); navigateTo(currentSlideIndex - 1); };
-    document.getElementById('nav-next').onclick = (e) => { e.stopPropagation(); navigateTo(currentSlideIndex + 1); };
+    document.getElementById('nav-prev').onclick = (e) => { e.stopPropagation(); navigateTo(currentIndex - 1); };
+    document.getElementById('nav-next').onclick = (e) => { e.stopPropagation(); navigateTo(currentIndex + 1); };
     document.getElementById('nav-fullscreen').onclick = (e) => { e.stopPropagation(); toggleFullScreen(); };
 
     let hideTimeout;
@@ -478,4 +404,69 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
+
+    // --- 9. Aspect Ratio Scaling Engine (Mobile Friendliness) ---
+    // Target resolution is 1280x720 (16:9)
+    const TARGET_WIDTH = 1280;
+    const TARGET_HEIGHT = 720;
+
+    function scaleToFit() {
+        const container = document.querySelector('.slide-container');
+        if (!container) return;
+
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+
+        // Calculate scale factors
+        const widthScale = windowWidth / TARGET_WIDTH;
+        const heightScale = windowHeight / TARGET_HEIGHT;
+
+        // Use the smaller scale factor to ensure it fits both ways (Letterboxing)
+        // This makes sure the slide ALWAYs stays 16:9 and fully visible
+        const scale = Math.min(widthScale, heightScale);
+
+        // Apply scaling via CSS variable
+        document.documentElement.style.setProperty('--slide-scale', scale);
+
+        container.style.width = `${TARGET_WIDTH}px`;
+        container.style.height = `${TARGET_HEIGHT}px`;
+        container.style.zIndex = '1';
+
+        // Ensure body doesn't scroll and has a clean black letterbox background
+        document.body.style.overflow = 'hidden';
+        document.body.style.backgroundColor = '#0B1120';
+        document.body.style.margin = '0';
+        document.body.style.display = 'block';
+
+        // Trigger chart resizes for any responsive components
+        window.dispatchEvent(new Event('resize'));
+    }
+
+    // Add necessary styles for the scaling container and fidelity
+    const scaleStyle = document.createElement('style');
+    scaleStyle.innerHTML = `
+        .slide-container {
+            will-change: transform;
+            transition: none !important; 
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: #0B1120;
+            border: none !important;
+            box-shadow: none !important;
+        }
+        /* Fix for absolute/fixed elements within the container */
+        .slide-container * {
+            max-width: none !important;
+        }
+    `;
+    document.head.appendChild(scaleStyle);
+
+    // Initial scale and listener
+    window.addEventListener('resize', scaleToFit);
+    scaleToFit();
+
+    // Multi-stage check to handle late rendering
+    setTimeout(scaleToFit, 50);
+    setTimeout(scaleToFit, 500);
 });
