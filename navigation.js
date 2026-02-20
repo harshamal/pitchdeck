@@ -29,6 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
             from { opacity: 0; transform: scale(0.98) translateY(10px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
+        .slide-container {
+            view-transition-name: slide-wrapper;
+        }
         body {
             animation: slideFadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
             cursor: default;
@@ -161,29 +164,122 @@ document.addEventListener('DOMContentLoaded', () => {
     document.head.appendChild(style);
 
     // 2. Helper to get current index
-    function getCurrentSlideIndex() {
-        const path = window.location.pathname;
+    function getSlideIndex(path) {
+        // Handle root, directory paths, and index.html
+        if (path.endsWith('/') || path.endsWith('index.html') || path.endsWith('pitchdeck')) {
+            return 1;
+        }
+
         const filename = decodeURIComponent(path.substring(path.lastIndexOf('/') + 1));
-        if (filename === 'index.html' || filename === '') return 1;
-        const match = filename.match(/slides \((\d+)\)\.html/i);
+        if (filename === 'index.html' || filename === '' || filename === 'pitchdeck') return 1;
+
+        const match = filename.match(/slides\s*\((\d+)\)\.html/i);
         return match ? parseInt(match[1], 10) : null;
     }
 
-    const currentIndex = getCurrentSlideIndex();
-    if (currentIndex === null) return;
+    let currentSlideIndex = getSlideIndex(window.location.pathname);
+    if (currentSlideIndex === null) return;
 
-    // 3. Navigation
-    function navigateTo(index) {
+    // 3. Seamless SPA-Style Navigation
+    async function navigateTo(index, pushState = true) {
         if (index < 1 || index > totalSlides) return;
+        if (index === currentSlideIndex && pushState) return;
+
         const url = index === 1 ? 'index.html' : `slides (${index}).html`;
+        const isLocalFile = window.location.protocol === 'file:';
 
-        // Instant visual feedback for snappier feel
-        document.body.style.opacity = '0';
-        document.body.style.transform = 'translateY(-10px) scale(0.99)';
-        document.body.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+        // Update URL - Skip pushState on local file:// to avoid SecurityError
+        if (pushState && !isLocalFile) {
+            try {
+                window.history.pushState({ index }, '', url);
+            } catch (e) {
+                console.warn('History API not available (local file?)');
+            }
+        }
 
-        window.location.href = url;
+        const performTransition = async () => {
+            try {
+                // Fetch might also fail on some local setups due to CORS
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Fetch failed');
+
+                const html = await response.text();
+                const parser = new DOMParser();
+                const newDoc = parser.parseFromString(html, 'text/html');
+
+                // Update current index
+                currentSlideIndex = index;
+
+                // 1. Update Title
+                document.title = newDoc.title;
+
+                // 2. Swap Content
+                const newContent = newDoc.querySelector('.slide-container');
+                const oldContainer = document.querySelector('.slide-container');
+
+                if (newContent && oldContainer) {
+                    oldContainer.innerHTML = newContent.innerHTML;
+                    oldContainer.className = newContent.className;
+                } else {
+                    throw new Error('Container not found');
+                }
+
+                // 3. Update Progress Bar
+                if (progressBar) {
+                    progressBar.style.width = `${(currentSlideIndex / totalSlides) * 100}%`;
+                }
+
+                // 4. Update Presenter Controls Text
+                const counter = document.querySelector('#presenter-controls div[style*="min-width: 60px"]');
+                if (counter) {
+                    counter.innerText = `${currentSlideIndex} / ${totalSlides}`;
+                }
+
+                // 5. Update Menu Item Active State
+                document.querySelectorAll('.menu-item').forEach((item, idx) => {
+                    item.classList.toggle('current', (idx + 1) === currentSlideIndex);
+                });
+
+                // 6. Execute Scripts
+                const scripts = newDoc.querySelectorAll('script');
+                scripts.forEach(oldScript => {
+                    if (oldScript.src && (
+                        oldScript.src.includes('navigation.js') ||
+                        oldScript.src.includes('tailwindcss') ||
+                        oldScript.src.includes('echarts')
+                    )) return;
+
+                    const newScript = document.createElement('script');
+                    if (oldScript.src) {
+                        newScript.src = oldScript.src;
+                    } else {
+                        newScript.textContent = oldScript.textContent;
+                    }
+                    document.body.appendChild(newScript);
+                    if (!oldScript.src) newScript.remove();
+                });
+
+            } catch (err) {
+                // Fallback to traditional navigation if SPA fails
+                window.location.href = url;
+            }
+        };
+
+        // Use View Transitions API if available
+        if (document.startViewTransition) {
+            document.startViewTransition(performTransition);
+        } else {
+            performTransition();
+        }
     }
+
+    // Handle Browser Back/Forward
+    window.addEventListener('popstate', (e) => {
+        const index = e.state ? e.state.index : getSlideIndex(window.location.pathname);
+        if (index) {
+            navigateTo(index, false);
+        }
+    });
 
     // 4. Input Events
     document.addEventListener('keydown', (e) => {
@@ -194,13 +290,13 @@ document.addEventListener('DOMContentLoaded', () => {
             case ' ':
             case 'PageDown':
             case 'Enter':
-                navigateTo(currentIndex + 1);
+                navigateTo(currentSlideIndex + 1);
                 break;
             case 'ArrowLeft':
             case 'ArrowUp':
             case 'PageUp':
             case 'Backspace':
-                navigateTo(currentIndex - 1);
+                navigateTo(currentSlideIndex - 1);
                 break;
             case 'f':
             case 'F':
@@ -218,13 +314,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('click', (e) => {
         if (e.target.closest('button, a, #presenter-controls, #slide-menu')) return;
-        navigateTo(currentIndex + 1);
+        navigateTo(currentSlideIndex + 1);
     });
 
     // 5. Progress Bar
     const progressBar = document.createElement('div');
     progressBar.id = 'progress-bar';
-    progressBar.style.width = `${(currentIndex / totalSlides) * 100}%`;
+    progressBar.style.width = `${(currentSlideIndex / totalSlides) * 100}%`;
     document.body.appendChild(progressBar);
 
     // 6. UI Controls
@@ -270,7 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <i class="fas fa-chevron-left"></i>
         </button>
         <div style="color: rgba(255,255,255,1); font-size: 13px; font-weight: 800; font-family: 'Inter', sans-serif; padding: 0 4px; min-width: 60px; text-align: center;">
-            ${currentIndex} / ${totalSlides}
+            ${currentSlideIndex} / ${totalSlides}
         </div>
         <button id="nav-next" class="nav-btn" style="${btnStyle}" title="Next">
             <i class="fas fa-chevron-right"></i>
@@ -293,7 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (let i = 1; i <= totalSlides; i++) {
             const item = document.createElement('div');
-            item.className = `menu-item ${i === currentIndex ? 'current' : ''}`;
+            item.className = `menu-item ${i === currentSlideIndex ? 'current' : ''}`;
 
             // Add Slide Number Badge
             const badge = document.createElement('div');
@@ -328,13 +424,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Prefetch next and previous
-    addPrefetch(currentIndex + 1);
-    addPrefetch(currentIndex - 1);
+    addPrefetch(currentSlideIndex + 1);
+    addPrefetch(currentSlideIndex - 1);
 
     // Listeners
     document.getElementById('nav-menu').onclick = (e) => { e.stopPropagation(); toggleMenu(); };
-    document.getElementById('nav-prev').onclick = (e) => { e.stopPropagation(); navigateTo(currentIndex - 1); };
-    document.getElementById('nav-next').onclick = (e) => { e.stopPropagation(); navigateTo(currentIndex + 1); };
+    document.getElementById('nav-prev').onclick = (e) => { e.stopPropagation(); navigateTo(currentSlideIndex - 1); };
+    document.getElementById('nav-next').onclick = (e) => { e.stopPropagation(); navigateTo(currentSlideIndex + 1); };
     document.getElementById('nav-fullscreen').onclick = (e) => { e.stopPropagation(); toggleFullScreen(); };
 
     let hideTimeout;

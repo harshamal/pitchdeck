@@ -241,41 +241,42 @@
                         </div>
                         <div>
                             <div class="text-5xl font-bold text-white mb-2 brand-font tracking-tight">1,250+</div>
-                            <p class="text-slate-300 font-medium">Active Stations</p>
+                            <p class="text-slate-300 font-medium">Active Stations Everywhere</p>
                             <p class="text-slate-500 text-xs mt-2 leading-relaxed">Network expanding with <span
                                     class="text-emerald-400">Sinopec, Shell & United Petroleum</span>.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Col 2: The Map (Visual Anchor) -->
+                <!-- Col 2: Market Landscape Chart (Visual Anchor) -->
                 <div class="col-span-5 h-full">
-                    <div class="stat-card w-full h-full !p-0 relative group overflow-hidden border-blue-500/30">
-                        <div class="absolute inset-0 bg-gradient-to-b from-blue-900/10 to-slate-900/80 z-0"></div>
-
-                        <!-- Map Image -->
-                        <div class="relative z-10 w-full h-full flex items-center justify-center p-8">
-                            <img src="media__1771540379391.png" alt="Sri Lanka Map"
-                                class="h-full w-auto object-contain filter drop-shadow-[0_0_25px_rgba(59,130,246,0.4)] transition-transform duration-700 group-hover:scale-105" />
-
-                            <!-- Markers -->
-                            <div class="location-marker" style="top: 42%; left: 45%; animation-delay: 0s;"
-                                title="Colombo"></div>
-                            <div class="location-marker" style="top: 38%; left: 52%; animation-delay: 0.5s;"
-                                title="Kandy"></div>
-                            <div class="location-marker" style="top: 60%; left: 48%; animation-delay: 1s;"
-                                title="Galle"></div>
-                            <div class="location-marker" style="top: 25%; left: 45%; animation-delay: 1.5s;"
-                                title="Jaffna"></div>
-                            <div class="location-marker"
-                                style="top: 45%; left: 75%; animation-delay: 0.8s; background-color: #10b981; border-color: #ecfdf5; box-shadow: 0 0 20px #10b981;"
-                                title="Trincomalee"></div>
+                    <div class="stat-card w-full h-full !p-6 relative group overflow-hidden border-blue-500/30">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h3 class="text-lg font-bold text-white brand-font">Market Composition</h3>
+                                <p class="text-xs text-slate-400 font-mono">STATION COUNT BY OPERATOR</p>
+                            </div>
+                            <div class="px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full">
+                                <span class="text-[10px] text-blue-400 font-bold uppercase tracking-widest">Retail
+                                    Landscape</span>
+                            </div>
                         </div>
 
-                        <!-- Overlay Label -->
-                        <div class="absolute bottom-6 right-6 z-20 text-right">
-                            <p class="text-xs text-slate-400 font-mono tracking-widest uppercase mb-1">Coverage</p>
-                            <p class="text-2xl font-bold text-white brand-font">Islandwide</p>
+                        <div class="w-full h-full flex-1 min-h-0">
+                            <!-- ECharts Container for Market Composition -->
+                            <div id="compositionChart" style="width: 100%; height: 85%;"></div>
+                        </div>
+
+                        <!-- Insight Tag -->
+                        <div
+                            class="absolute bottom-6 left-6 right-6 p-4 bg-slate-900/60 backdrop-blur-md rounded-xl border border-white/5">
+                            <div class="flex items-center gap-3">
+                                <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                                <p class="text-sm text-slate-300">
+                                    <span class="text-white font-bold">Privatization Era:</span> 300+ stations recently
+                                    handed to global giants.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -347,6 +348,76 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // --- Chart 1: Market Composition (Bar Chart) ---
+            var compDom = document.getElementById('compositionChart');
+            var compChart = echarts.init(compDom);
+
+            var compOption = {
+                grid: {
+                    left: '5%',
+                    right: '5%',
+                    bottom: '15%',
+                    top: '10%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Ceypetco', 'LIOC', 'Sinopec', 'RM Parks / Shell'],
+                    axisLabel: {
+                        color: '#94a3b8',
+                        fontSize: 10,
+                        interval: 0,
+                        rotate: 15
+                    },
+                    axisTick: { show: false },
+                    axisLine: { lineStyle: { color: 'rgba(255,255,255,0.1)' } }
+                },
+                yAxis: {
+                    type: 'value',
+                    splitLine: { lineStyle: { color: 'rgba(255,255,255,0.05)', type: 'dashed' } },
+                    axisLabel: { color: '#64748b', fontSize: 10 }
+                },
+                series: [{
+                    data: [
+                        {
+                            value: 1100,
+                            itemStyle: { color: '#3b82f6' }
+                        },
+                        {
+                            value: 250,
+                            itemStyle: { color: '#60a5fa' }
+                        },
+                        {
+                            value: 150,
+                            itemStyle: { color: '#10b981' }
+                        },
+                        {
+                            value: 150,
+                            itemStyle: { color: '#34d399' }
+                        }
+                    ],
+                    type: 'bar',
+                    barWidth: '40%',
+                    showBackground: true,
+                    backgroundStyle: {
+                        color: 'rgba(255, 255, 255, 0.02)',
+                        borderRadius: 4
+                    },
+                    itemStyle: {
+                        borderRadius: [4, 4, 0, 0]
+                    },
+                    label: {
+                        show: true,
+                        position: 'top',
+                        color: '#fff',
+                        fontSize: 12,
+                        fontWeight: 'bold'
+                    }
+                }]
+            };
+            compChart.setOption(compOption);
+
+            // --- Chart 2: Digitization Gap (Donut Chart) ---
             var chartDom = document.getElementById('marketChart');
             var myChart = echarts.init(chartDom);
             var option;
@@ -426,7 +497,10 @@
             };
 
             myChart.setOption(option);
-            window.addEventListener('resize', () => myChart.resize());
+            window.addEventListener('resize', () => {
+                compChart.resize();
+                myChart.resize();
+            });
         });
     </script>
     <script src='navigation.js'></script>
