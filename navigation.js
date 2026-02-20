@@ -162,6 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function getCurrentSlideIndex() {
         const path = window.location.pathname;
         const filename = decodeURIComponent(path.substring(path.lastIndexOf('/') + 1));
+        if (filename === 'index.html' || filename === '') return 1;
         const match = filename.match(/slides \((\d+)\)\.html/i);
         return match ? parseInt(match[1], 10) : null;
     }
@@ -172,7 +173,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. Navigation
     function navigateTo(index) {
         if (index < 1 || index > totalSlides) return;
-        window.location.href = `slides (${index}).html`;
+        const url = index === 1 ? 'index.html' : `slides (${index}).html`;
+        window.location.href = url;
     }
 
     // 4. Input Events
@@ -290,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add Live Preview Iframe
         const iframe = document.createElement('iframe');
         iframe.className = 'preview-iframe';
-        iframe.src = `slides (${i}).html`;
+        iframe.src = i === 1 ? 'index.html' : `slides (${i}).html`;
         iframe.loading = 'lazy'; // Improve performance
         item.appendChild(iframe);
 
@@ -309,16 +311,23 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('nav-fullscreen').onclick = (e) => { e.stopPropagation(); toggleFullScreen(); };
 
     let hideTimeout;
-    function showControls() {
-        controls.classList.add('visible');
-        clearTimeout(hideTimeout);
-        hideTimeout = setTimeout(() => {
-            if (!menu.classList.contains('active')) controls.classList.remove('visible');
-        }, 500);
+    function showControls(e) {
+        // Only trigger if mouse is in the bottom 100px of the screen
+        const isNearBottom = e && (window.innerHeight - e.clientY < 100);
+
+        if (isNearBottom || menu.classList.contains('active')) {
+            controls.classList.add('visible');
+            clearTimeout(hideTimeout);
+            hideTimeout = setTimeout(() => {
+                if (!menu.classList.contains('active')) controls.classList.remove('visible');
+            }, 2000);
+        }
     }
 
-    document.addEventListener('mousemove', showControls);
-    showControls();
+    document.addEventListener('mousemove', (e) => showControls(e));
+    // Initial reveal
+    controls.classList.add('visible');
+    setTimeout(() => { if (!menu.classList.contains('active')) controls.classList.remove('visible'); }, 2000);
 
     function toggleMenu() {
         menu.classList.toggle('active');
