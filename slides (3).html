@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>The Opportunity - FUELOPS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background-color: #0B1120;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B1120;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        /* Background Effects */
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(30, 41, 59, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 41, 59, 0.3) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+            opacity: 0.5;
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(11, 17, 32, 0) 70%);
+            border-radius: 50%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Content Layout */
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            flex: 1;
+            padding: 2rem 4rem 3rem 4rem;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3,
+        .brand-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Cards */
+        .stat-card {
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 1.25rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(59, 130, 246, 0.5);
+            background: rgba(30, 41, 59, 0.7);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-icon-wrapper {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            position: relative;
+        }
+
+        .location-marker {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #3b82f6;
+            border: 2px solid white;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #3b82f6;
+            z-index: 20;
+            animation: pulse-marker 2s infinite;
+        }
+
+        @keyframes pulse-marker {
+            0% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 20px rgba(59, 130, 246, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+            }
+        }
+
+        /* Chart Section */
+        .chart-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .insight-box {
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+            border-left: 4px solid #3b82f6;
+            border-radius: 0 12px 12px 0;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container">
+        <!-- Background Elements -->
+        <div class="bg-grid"></div>
+        <div class="bg-glow" style="top: -20%; right: -10%;"></div>
+        <div class="bg-glow"
+            style="bottom: -20%; left: -10%; background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, rgba(11, 17, 32, 0) 70%);">
+        </div>
+
+        <div class="content-wrapper">
+
+            <!-- Header Section (Compact) -->
+            <div class="flex items-end justify-between mb-8 shrink-0 px-2 pt-2">
+                <div>
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-8 h-1 bg-blue-500 rounded-full shadow-[0_0_10px_#3b82f6]"></div>
+                        <span class="text-blue-400 font-bold tracking-[0.2em] text-xs uppercase">Market Landscape</span>
+                    </div>
+                    <h1 class="text-5xl font-bold text-white leading-tight tracking-tight">
+                        The <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">Rs. 2.5B
+                            Opportunity</span>
+                    </h1>
+                </div>
+                <div class="text-right">
+                    <div
+                        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-300 text-sm font-medium">
+                        <span class="relative flex h-2 w-2">
+                            <span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                        </span>
+                        Market Opening to Global Players
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bento Grid Layout -->
+            <div class="grid grid-cols-12 gap-6 flex-1 min-h-0 pb-6">
+
+                <!-- Col 1: Demand & Infrastructure (Stats) -->
+                <div class="col-span-3 flex flex-col gap-6">
+                    <!-- Stat Card 1: Vehicles -->
+                    <div class="stat-card flex-1 group !p-6 justify-between">
+                        <div class="flex justify-between items-start">
+                            <div
+                                class="stat-icon-wrapper bg-blue-500/10 text-blue-400 group-hover:bg-blue-500 group-hover:text-white !mb-0 !w-12 !h-12 !text-xl">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <span
+                                class="text-[10px] text-slate-400 font-mono tracking-widest uppercase mt-1">DEMAND</span>
+                        </div>
+                        <div>
+                            <div class="text-6xl font-bold text-white mb-2 brand-font tracking-tight">8.5 M+</div>
+                            <p class="text-slate-300 font-medium">Registered Vehicles</p>
+                            <p class="text-slate-500 text-xs mt-2 leading-relaxed">Consistent daily fuel demand across
+                                the island (DMT 2024).</p>
+                        </div>
+                    </div>
+
+                    <!-- Stat Card 2: Stations -->
+                    <div class="stat-card flex-1 group !p-6 justify-between">
+                        <div class="flex justify-between items-start">
+                            <div
+                                class="stat-icon-wrapper bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500 group-hover:text-white !mb-0 !w-12 !h-12 !text-xl">
+                                <i class="fas fa-gas-pump"></i>
+                            </div>
+                            <span
+                                class="text-[10px] text-slate-400 font-mono tracking-widest uppercase mt-1">INFRASTRUCTURE</span>
+                        </div>
+                        <div>
+                            <div class="text-5xl font-bold text-white mb-2 brand-font tracking-tight">1,250+</div>
+                            <p class="text-slate-300 font-medium">Active Stations</p>
+                            <p class="text-slate-500 text-xs mt-2 leading-relaxed">Network expanding with <span
+                                    class="text-emerald-400">Sinopec, Shell & United Petroleum</span>.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Col 2: The Map (Visual Anchor) -->
+                <div class="col-span-5 h-full">
+                    <div class="stat-card w-full h-full !p-0 relative group overflow-hidden border-blue-500/30">
+                        <div class="absolute inset-0 bg-gradient-to-b from-blue-900/10 to-slate-900/80 z-0"></div>
+
+                        <!-- Map Image -->
+                        <div class="relative z-10 w-full h-full flex items-center justify-center p-8">
+                            <img src="media__1771540379391.png" alt="Sri Lanka Map"
+                                class="h-full w-auto object-contain filter drop-shadow-[0_0_25px_rgba(59,130,246,0.4)] transition-transform duration-700 group-hover:scale-105" />
+
+                            <!-- Markers -->
+                            <div class="location-marker" style="top: 42%; left: 45%; animation-delay: 0s;"
+                                title="Colombo"></div>
+                            <div class="location-marker" style="top: 38%; left: 52%; animation-delay: 0.5s;"
+                                title="Kandy"></div>
+                            <div class="location-marker" style="top: 60%; left: 48%; animation-delay: 1s;"
+                                title="Galle"></div>
+                            <div class="location-marker" style="top: 25%; left: 45%; animation-delay: 1.5s;"
+                                title="Jaffna"></div>
+                            <div class="location-marker"
+                                style="top: 45%; left: 75%; animation-delay: 0.8s; background-color: #10b981; border-color: #ecfdf5; box-shadow: 0 0 20px #10b981;"
+                                title="Trincomalee"></div>
+                        </div>
+
+                        <!-- Overlay Label -->
+                        <div class="absolute bottom-6 right-6 z-20 text-right">
+                            <p class="text-xs text-slate-400 font-mono tracking-widest uppercase mb-1">Coverage</p>
+                            <p class="text-2xl font-bold text-white brand-font">Islandwide</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Col 3: The Gap & Driver -->
+                <div class="col-span-4 flex flex-col gap-6">
+                    <!-- The Gap (Chart) -->
+                    <div class="stat-card h-[60%] !p-0 !overflow-hidden relative">
+                        <div class="absolute top-5 left-5 right-5 flex justify-between items-center z-10">
+                            <h3 class="text-sm font-bold text-white uppercase tracking-wider">Digitization Gap</h3>
+                            <span
+                                class="px-2 py-0.5 bg-red-500/20 text-red-400 text-[10px] font-bold rounded-full border border-red-500/30 animate-pulse">CRITICAL</span>
+                        </div>
+
+                        <div class="w-full h-full flex items-center justify-center pt-8">
+                            <!-- ECharts Container -->
+                            <div id="marketChart" style="width: 100%; height: 100%;"></div>
+                        </div>
+
+                        <!-- Overlay Text for Context -->
+                        <div
+                            class="absolute bottom-0 w-full bg-slate-900/80 backdrop-blur-md p-4 border-t border-white/10">
+                            <p class="text-sm text-center text-slate-300">
+                                <span class="text-blue-400 font-bold text-lg">95%</span> of stations rely on manual
+                                processes
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- The Market Driver -->
+                    <div
+                        class="stat-card h-[40%] !p-6 bg-gradient-to-br from-slate-800/80 to-blue-900/30 !border-blue-500/30 flex flex-col justify-center">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div
+                                class="w-10 h-10 rounded-lg bg-blue-500 flex items-center justify-center text-white text-lg shadow-lg shadow-blue-500/30">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-white uppercase tracking-wider leading-none">The
+                                    Catalyst</h3>
+                                <span class="text-[10px] text-blue-300 font-mono">WHY NOW?</span>
+                            </div>
+                        </div>
+                        <p class="text-base text-slate-200 leading-snug">
+                            <span class="text-white font-bold">Privatization Era:</span>
+                            Govt unlocking retail to giants like <span
+                                class="text-blue-400 font-semibold">Sinopec</span> and <span
+                                class="text-emerald-400 font-semibold">RM Parks (Shell)</span>.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer -->
+            <div
+                class="absolute bottom-6 left-0 w-full px-12 flex items-center justify-between pointer-events-none z-50">
+                <div class="flex items-center gap-2 opacity-50">
+                    <i class="fas fa-globe-asia text-slate-400"></i>
+                    <p class="text-xs text-slate-400 font-mono tracking-widest">SRI LANKA / SOUTH ASIA EXPANSION</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="h-[1px] w-12 bg-slate-700"></div>
+                    <span class="text-slate-600 font-mono text-sm font-bold">03</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var chartDom = document.getElementById('marketChart');
+            var myChart = echarts.init(chartDom);
+            var option;
+
+            option = {
+                tooltip: {
+                    trigger: 'item',
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                    borderColor: '#334155',
+                    textStyle: { color: '#fff', fontSize: 13 },
+                    formatter: '{b}: <b>{c}%</b>'
+                },
+                legend: {
+                    show: false
+                },
+                series: [
+                    {
+                        name: 'Digitization',
+                        type: 'pie',
+                        radius: ['55%', '75%'],
+                        center: ['50%', '50%'],
+                        avoidLabelOverlap: false,
+                        itemStyle: {
+                            borderRadius: 6,
+                            borderColor: '#0f172a',
+                            borderWidth: 3,
+                        },
+                        label: {
+                            show: true,
+                            position: 'center',
+                            formatter: '{d}%',
+                            fontSize: 32,
+                            fontWeight: 'bold',
+                            fontFamily: 'Space Grotesk',
+                            color: '#fff',
+                            textShadowColor: 'rgba(0,0,0,0.5)',
+                            textShadowBlur: 5
+                        },
+                        emphasis: {
+                            scale: true,
+                            scaleSize: 5,
+                            label: {
+                                show: true,
+                                fontSize: 36
+                            }
+                        },
+                        data: [
+                            {
+                                value: 95,
+                                name: 'Undigitized',
+                                itemStyle: {
+                                    color: {
+                                        type: 'linear',
+                                        x: 0, y: 0, x2: 0, y2: 1,
+                                        colorStops: [{ offset: 0, color: '#334155' }, { offset: 1, color: '#1e293b' }]
+                                    }
+                                },
+                                label: { show: true, color: '#94a3b8', fontSize: 24 }
+                            },
+                            {
+                                value: 5,
+                                name: 'Digitized',
+                                itemStyle: {
+                                    color: {
+                                        type: 'linear',
+                                        x: 0, y: 0, x2: 0, y2: 1,
+                                        colorStops: [{ offset: 0, color: '#60a5fa' }, { offset: 1, color: '#3b82f6' }]
+                                    },
+                                    shadowBlur: 15,
+                                    shadowColor: 'rgba(59, 130, 246, 0.5)'
+                                },
+                                label: { show: false }
+                            }
+                        ]
+                    }
+                ]
+            };
+
+            myChart.setOption(option);
+            window.addEventListener('resize', () => myChart.resize());
+        });
+    </script>
+    <script src='navigation.js'></script>
+</body>
+
+</html>

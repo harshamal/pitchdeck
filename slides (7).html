@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>How It Works - FUELOPS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background-color: #0B1120;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B1120;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3,
+        .brand-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Step Card Styling */
+        .step-card {
+            position: relative;
+            background-color: rgba(30, 41, 59, 0.4);
+            /* Slate-800/40 */
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            height: 420px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+        }
+
+        .step-card:hover {
+            transform: translateY(-8px);
+            background-color: rgba(30, 41, 59, 0.7);
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .step-card.final-step {
+            background-color: rgba(16, 185, 129, 0.05);
+            /* Emerald tint */
+            border-color: rgba(16, 185, 129, 0.2);
+        }
+
+        .step-card.final-step:hover {
+            border-color: rgba(16, 185, 129, 0.5);
+            box-shadow: 0 20px 40px -10px rgba(16, 185, 129, 0.1);
+        }
+
+        /* Icon Styling */
+        .icon-box {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 20;
+            background-color: #1e293b;
+            /* Slate-800 */
+            border: 2px solid #334155;
+        }
+
+        /* Connecting Line */
+        .process-line {
+            position: absolute;
+            top: 54px;
+            /* Aligned with icon center (padding top 32px + half icon 32px + extra margin adjustment) */
+            left: 80px;
+            right: 80px;
+            height: 2px;
+            background-color: #334155;
+            z-index: 0;
+        }
+
+        .process-line-active {
+            position: absolute;
+            top: 54px;
+            left: 80px;
+            width: 0%;
+            height: 2px;
+            background-color: #3b82f6;
+            z-index: 1;
+            animation: drawLine 2s ease-out forwards 0.5s;
+        }
+
+        @keyframes drawLine {
+            to {
+                width: 85%;
+            }
+        }
+
+        /* Step Number */
+        .step-number {
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.03);
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        /* Result Tag */
+        .result-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            color: #d1fae5;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container">
+        <!-- Background Grid -->
+        <svg class="absolute top-0 right-0 w-full h-full z-0 opacity-10 pointer-events-none" height="100%" width="100%">
+            <defs>
+                <pattern height="40" id="grid" patternunits="userSpaceOnUse" width="40">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#64748b" stroke-width="0.5"></path>
+                </pattern>
+            </defs>
+            <rect fill="url(#grid)" height="100%" width="100%"></rect>
+        </svg>
+        <!-- Header -->
+        <div class="px-12 pt-10 pb-4 z-20">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-8 h-1 bg-blue-500 rounded-full"></div>
+                <span class="text-blue-400 font-bold tracking-widest text-sm uppercase">How It Works</span>
+            </div>
+            <h1 class="text-4xl font-bold text-white">
+                From Configuration to Calculation
+            </h1>
+            <p class="text-slate-400 mt-2 text-lg">A streamlined 4-step workflow designed for station operators.</p>
+        </div>
+        <!-- Main Content Area -->
+        <div class="flex-1 px-12 relative mt-8">
+            <!-- Connecting Lines -->
+            <div class="process-line"></div>
+            <div class="process-line-active"></div>
+            <!-- Steps Grid -->
+            <div class="grid grid-cols-4 gap-6 relative z-10">
+                <!-- Step 1: Configuration -->
+                <div class="step-card group">
+                    <div class="step-number">01</div>
+                    <div
+                        class="icon-box group-hover:border-blue-500 group-hover:text-blue-400 transition-colors text-slate-400">
+                        <i class="fas fa-sliders-h"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Configure Station</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">Set up the digital twin of your physical
+                        station infrastructure.</p>
+                    <div class="mt-auto space-y-2">
+                        <div class="flex items-center gap-2 text-sm text-slate-500">
+                            <i class="fas fa-database text-xs w-4"></i> Map Tanks
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-slate-500">
+                            <i class="fas fa-gas-pump text-xs w-4"></i> Define Pumps
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-slate-500">
+                            <i class="fas fa-filter text-xs w-4"></i> Fuel Types
+                        </div>
+                    </div>
+                </div>
+                <!-- Step 2: Inputs -->
+                <div class="step-card group">
+                    <div class="step-number">02</div>
+                    <div
+                        class="icon-box group-hover:border-blue-500 group-hover:text-blue-400 transition-colors text-slate-400">
+                        <i class="fas fa-ruler-vertical"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Record Readings</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">Input physical stock measurements and
+                        incoming inventory.</p>
+                    <div class="mt-auto space-y-2">
+                        <div class="flex items-center gap-2 text-sm text-slate-500">
+                            <i class="fas fa-pen-alt text-xs w-4"></i> Daily Dips
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-slate-500">
+                            <i class="fas fa-truck text-xs w-4"></i> Bowser Deliveries
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-slate-500">
+                            <i class="fas fa-temperature-low text-xs w-4"></i> Density Checks
+                        </div>
+                    </div>
+                </div>
+                <!-- Step 3: Shift Data -->
+                <div class="step-card group">
+                    <div class="step-number">03</div>
+                    <div
+                        class="icon-box group-hover:border-blue-500 group-hover:text-blue-400 transition-colors text-slate-400">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Enter Shift Data</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">Log meter readings at shift changeovers.</p>
+                    <div class="mt-auto space-y-2">
+                        <div class="flex items-center gap-2 text-sm text-slate-500">
+                            <i class="fas fa-tachometer-alt text-xs w-4"></i> Closing Meter
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-slate-500">
+                            <i class="fas fa-user-tag text-xs w-4"></i> Attendant ID
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-slate-500">
+                            <i class="fas fa-money-bill-wave text-xs w-4"></i> Cash Collections
+                        </div>
+                    </div>
+                </div>
+                <!-- Step 4: Automation (Highlighted) -->
+                <div class="step-card final-step">
+                    <div class="step-number" style="color: rgba(16, 185, 129, 0.1);">04</div>
+                    <div
+                        class="icon-box border-emerald-500/50 text-emerald-400 bg-emerald-900/20 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Auto-Calculation</h3>
+                    <p class="text-emerald-100/70 text-sm leading-relaxed mb-4">System instantly processes data to
+                        generate financial truth.</p>
+                    <div class="mt-auto">
+                        <div class="result-tag">
+                            <i class="fas fa-chart-line text-emerald-400"></i>
+                            <p>Total Sales Value</p>
+                        </div>
+                        <div class="result-tag">
+                            <i class="fas fa-balance-scale text-emerald-400"></i>
+                            <p>Stock Balance &amp; Variance</p>
+                        </div>
+                        <div class="result-tag">
+                            <i class="fas fa-coins text-emerald-400"></i>
+                            <p>Daily Profitability</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- No Manual Calc Badge -->
+        <div class="absolute bottom-12 left-1/2 transform -translate-x-1/2">
+            <div class="flex items-center gap-3 bg-slate-800 border border-slate-700 rounded-full px-6 py-2 shadow-lg">
+                <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                <p class="text-slate-300 text-sm font-medium">No manual calculations required.</p>
+            </div>
+        </div>
+        <!-- Footer -->
+        <div class="absolute bottom-8 right-12 flex items-center gap-4">
+            <div class="h-[1px] w-12 bg-slate-700"></div>
+            <span class="text-slate-600 font-mono text-sm">07</span>
+        </div>
+    </div>
+<script src='navigation.js'></script>
+</body>
+
+</html>
+

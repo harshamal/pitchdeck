@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>FUELOPS Pitch Deck Cover</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=Space+Grotesk:wght@500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            background-color: #0B1120;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* High quality abstract tech/fuel image */
+            background-image: url("https://www.genspark.ai/image_placeholder.png");
+            background-size: cover;
+            background-position: center;
+            opacity: 0.25;
+            z-index: 0;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(11, 17, 32, 0.9);
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 900px;
+            padding: 0 40px;
+        }
+
+        .logo-text {
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        .glow-effect {
+            box-shadow: 0 0 40px rgba(59, 130, 246, 0.3);
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container">
+        <!-- Background Image -->
+        <div class="bg-image"></div>
+        <!-- Dark Overlay -->
+        <div class="overlay"></div>
+        <!-- Tech Pattern SVG -->
+        <svg class="absolute top-0 left-0 w-full h-full z-[2] opacity-15" height="100%" width="100%">
+            <defs>
+                <pattern height="60" id="grid" patternunits="userSpaceOnUse" width="60">
+                    <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#3b82f6" stroke-width="0.5"></path>
+                    <circle cx="60" cy="60" fill="#60a5fa" r="1"></circle>
+                </pattern>
+            </defs>
+            <rect fill="url(#grid)" height="100%" width="100%"></rect>
+        </svg>
+        <!-- Main Content -->
+        <div class="content flex flex-col items-center">
+            <!-- Icon/Logo Mark -->
+            <div class="mb-10 animate-fade-in-up">
+                <div
+                    class="inline-flex items-center justify-center w-24 h-24 bg-blue-600 rounded-2xl mb-4 shadow-2xl shadow-blue-500/40 border border-blue-400">
+                    <img src="logo_short.png" alt="FUELOPS Logo" class="w-16 h-16 object-contain brightness-0 invert">
+                </div>
+            </div>
+            <!-- Brand Name -->
+            <div class="mb-2">
+                <h1 class="text-8xl font-bold logo-text tracking-tight text-white mb-2 drop-shadow-lg">
+                    FUELOPS
+                </h1>
+            </div>
+            <!-- Separator -->
+            <div class="h-1.5 w-24 bg-blue-500 mx-auto my-8 rounded-full"></div>
+            <!-- Tagline -->
+            <h2 class="text-4xl font-light text-blue-100 mb-8 leading-tight tracking-wide">
+                The Operating System for <br /> <span class="font-bold text-white">Modern Fuel Stations</span>
+            </h2>
+            <!-- Description -->
+            <div class="glass-panel px-8 py-4 mb-12 max-w-3xl">
+                <p class="text-lg text-gray-300 leading-relaxed font-normal">
+                    Digitizing fuel station operations with real-time control, inventory intelligence, and profit
+                    visibility.
+                </p>
+            </div>
+            <!-- Attribution -->
+            <div class="mt-4 flex flex-col items-center">
+                <p class="text-xs text-gray-500 uppercase tracking-[0.3em] font-semibold mb-2">Developed By</p>
+                <div class="flex items-center gap-3 px-6 py-2 bg-slate-800/50 rounded-full border border-slate-700">
+                    <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+                    <span class="text-lg font-bold text-white tracking-widest font-mono">SYNCONIC</span>
+                </div>
+            </div>
+        </div>
+        <!-- Decorative Elements -->
+        <div class="absolute bottom-0 left-0 w-full h-2 bg-blue-600 z-20"></div>
+        <!-- Corner Data -->
+        <div class="absolute top-12 right-12 z-20 text-right">
+            <div class="flex flex-col items-end gap-1">
+                <span
+                    class="px-2 py-1 bg-blue-900/50 text-blue-200 text-xs font-mono rounded border border-blue-800/50">V
+                    1.0</span>
+                <p class="text-xs text-slate-500 font-mono">CONFIDENTIAL</p>
+            </div>
+        </div>
+        <!-- Abstract Graphics -->
+        <div class="absolute bottom-12 right-12 z-10 opacity-20">
+            <i class="fas fa-network-wired text-8xl text-blue-400"></i>
+        </div>
+        <div class="absolute top-24 left-12 z-10 opacity-10">
+            <i class="fas fa-chart-line text-9xl text-slate-400"></i>
+        </div>
+    </div>
+    <script src='navigation.js'></script>
+</body>
+
+</html>

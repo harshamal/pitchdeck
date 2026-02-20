@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Traction &amp; Validation - FUELOPS</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background-color: #0B1120;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B1120;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        .brand-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Background Effects */
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 2px 2px, rgba(59, 130, 246, 0.1) 1px, transparent 0);
+            background-size: 50px 50px;
+            z-index: 0;
+        }
+
+        .bg-glow {
+            position: absolute;
+            top: 50%;
+            right: -100px;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+        }
+
+        /* Header Layout */
+        .header-section {
+            padding: 4rem 4rem 2rem;
+            z-index: 20;
+        }
+
+        /* Validation Cards */
+        .validation-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            padding: 0 4rem;
+            z-index: 10;
+        }
+
+        .validation-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            height: 240px;
+        }
+
+        .validation-card:hover {
+            transform: translateY(-8px);
+            background: rgba(15, 23, 42, 0.8);
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-icon-wrapper {
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .card-desc {
+            font-size: 1rem;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        /* Color Variations */
+        .card-dna .card-icon-wrapper {
+            color: #60a5fa;
+            border-color: rgba(59, 130, 246, 0.3);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .card-logic .card-icon-wrapper {
+            color: #f472b6;
+            border-color: rgba(244, 114, 182, 0.3);
+            background: rgba(244, 114, 182, 0.1);
+        }
+
+        .card-launch .card-icon-wrapper {
+            color: #34d399;
+            border-color: rgba(52, 211, 153, 0.3);
+            background: rgba(52, 211, 153, 0.1);
+        }
+
+        /* Modern Timeline Section */
+        .timeline-container {
+            margin-top: 2rem;
+            padding: 2rem 4rem 4rem;
+            z-index: 10;
+        }
+
+        .timeline-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-header h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: #64748b;
+            font-weight: 800;
+        }
+
+        .timeline-line-wrapper {
+            position: relative;
+            height: 4px;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 4px;
+            margin: 0 2rem;
+        }
+
+        .timeline-progress-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 85%;
+            /* Updated progress */
+            background: linear-gradient(90deg, #3b82f6, #10b981);
+            border-radius: 4px;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .milestone-points {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .milestone-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            width: 160px;
+        }
+
+        .m-dot {
+            width: 14px;
+            height: 14px;
+            background: #0f172a;
+            border: 3px solid #1e293b;
+            border-radius: 50%;
+            z-index: 30;
+            transition: all 0.4s ease;
+        }
+
+        .m-item-done .m-dot {
+            background: #3b82f6;
+            border-color: #60a5fa;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .m-item-current .m-dot {
+            background: #10b981;
+            border-color: #34d399;
+            transform: scale(1.4);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+        }
+
+        .m-content {
+            position: absolute;
+            top: 24px;
+            text-align: center;
+            width: 200px;
+        }
+
+        .m-label {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #e2e8f0;
+            margin-bottom: 4px;
+        }
+
+        .m-date {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-family: 'Space Grotesk', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .m-item-current .m-label {
+            color: #10b981;
+        }
+
+        .launch-tag {
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+            padding: 4px 10px;
+            border-radius: 100px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            margin-top: 8px;
+            display: inline-block;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        /* Status Badge */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 100px;
+            color: #60a5fa;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .pulse-light {
+            width: 8px;
+            height: 8px;
+            background: #60a5fa;
+            border-radius: 50%;
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(96, 165, 250, 0.7);
+            }
+
+            70% {
+                transform: scale(1.2);
+                opacity: 0.5;
+                box-shadow: 0 0 0 10px rgba(96, 165, 250, 0);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(96, 165, 250, 0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container">
+        <!-- Background Decor -->
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+
+        <!-- Header -->
+        <div class="header-section">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="status-pill">
+                    <div class="pulse-light"></div>
+                    READY FOR PILOT
+                </div>
+                <div class="h-[1px] w-12 bg-slate-700"></div>
+                <span class="text-slate-500 font-bold tracking-widest text-xs uppercase">Traction & Validation</span>
+            </div>
+            <div class="flex justify-between items-end">
+                <div>
+                    <h1 class="text-5xl font-bold text-white mb-3">
+                        Expertise Meeting <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">Execution</span>
+                    </h1>
+                    <p class="text-slate-400 text-xl font-light">
+                        Built by ERP veterans, refined for the unique complexity of the fuel retail market.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Cards -->
+        <div class="validation-grid">
+            <!-- DNA Card -->
+            <div class="validation-card card-dna">
+                <div class="card-icon-wrapper">
+                    <i class="fas fa-microchip"></i>
+                </div>
+                <h3 class="card-title">SYNCONIC DNA</h3>
+                <p class="card-desc">
+                    Not just another SaaS startup. We are an established ERP firm with over a decade of experience
+                    building mission-critical financial systems that scale.
+                </p>
+            </div>
+
+            <!-- Market Logic Card -->
+            <div class="validation-card card-logic">
+                <div class="card-icon-wrapper">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
+                <h3 class="card-title">Hyper-Local Logic</h3>
+                <p class="card-desc">
+                    Western systems fail in this market. FUELOPS handles credit books, pump attendant shortages, and
+                    manual dip-reading variances out of the box.
+                </p>
+            </div>
+
+            <!-- Launch Card -->
+            <div class="validation-card card-launch">
+                <div class="card-icon-wrapper">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h3 class="card-title">Pilot Readiness</h3>
+                <p class="card-desc">
+                    Standard modules are battle-tested and ready for immediate deployment. We have the team and the tech
+                    to onboard 20+ stations in the first wave.
+                </p>
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="timeline-container">
+            <div class="timeline-header">
+                <i class="fas fa-clock-rotate-left text-blue-500"></i>
+                <h4>Platform Maturity Roadmap</h4>
+            </div>
+
+            <div class="timeline-line-wrapper">
+                <div class="timeline-progress-bar"></div>
+
+                <div class="milestone-points">
+                    <!-- DONE: Phase 1 -->
+                    <div class="milestone-item m-item-done">
+                        <div class="m-dot"></div>
+                        <div class="m-content">
+                            <p class="m-label">Architectural Phase</p>
+                            <p class="m-date">DEC 2025</p>
+                        </div>
+                    </div>
+
+                    <!-- DONE: Phase 2 -->
+                    <div class="milestone-item m-item-done">
+                        <div class="m-dot"></div>
+                        <div class="m-content">
+                            <p class="m-label">Core Engine Build</p>
+                            <p class="m-date">JAN 2026</p>
+                        </div>
+                    </div>
+
+                    <!-- CURRENT: Pilot Launch -->
+                    <div class="milestone-item m-item-current">
+                        <div class="m-dot"></div>
+                        <div class="m-content">
+                            <p class="m-label">Pilot Ready</p>
+                            <p class="m-date">Mar 2026</p>
+                            <div class="launch-tag">TRIAL STAGE</div>
+                        </div>
+                    </div>
+
+                    <!-- CURRENT: Pilot Launch -->
+                    <div class="milestone-item m-item-current">
+                        <div class="m-dot"></div>
+                        <div class="m-content">
+                            <p class="m-label">Launch</p>
+                            <p class="m-date">Q4 2026</p>
+                            <div class="launch-tag">COMMERCIAL</div>
+                        </div>
+                    </div>
+
+
+                    <!-- FUTURE: Public Expansion -->
+                    <div class="milestone-item">
+                        <div class="m-dot"></div>
+                        <div class="m-content">
+                            <p class="m-label">Market Expansion</p>
+                            <p class="m-date">Q1 2027</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="absolute bottom-8 right-12 flex items-center gap-4 z-30">
+            <div class="h-[1px] w-12 bg-slate-700"></div>
+            <span class="text-slate-600 font-mono text-sm font-bold">15</span>
+        </div>
+    </div>
+    <script src='navigation.js'></script>
+</body>
+
+</html>

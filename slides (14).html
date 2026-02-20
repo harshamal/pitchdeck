@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Strategic Fit - FUELOPS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background-color: #0B1120;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B1120;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        .brand-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Background Pattern */
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .bg-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Hub Container */
+        .hub-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+            margin-top: -20px;
+        }
+
+        /* Center Node (FUELOPS) */
+        .center-node {
+            width: 220px;
+            height: 220px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 20;
+            box-shadow: 0 0 50px rgba(59, 130, 246, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .center-node::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.05);
+                opacity: 0.2;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+        }
+
+        .center-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.02em;
+            margin-bottom: 4px;
+        }
+
+        .center-sub {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #60a5fa;
+            background: rgba(59, 130, 246, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        /* Satellite Nodes (SYNCONIC) */
+        .satellite-node {
+            position: absolute;
+            width: 280px;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+
+        .satellite-node:hover {
+            background: rgba(30, 41, 59, 0.9);
+            border-color: rgba(59, 130, 246, 0.4);
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
+            z-index: 25;
+        }
+
+        /* Positioning Satellites */
+        .node-1 {
+            transform: translate(0, -220px);
+        }
+
+        /* Top - Accounting */
+        .node-2 {
+            transform: translate(-320px, 160px);
+        }
+
+        /* Bottom Left - Payroll */
+        .node-3 {
+            transform: translate(320px, 160px);
+        }
+
+        /* Bottom Right - ERP */
+
+        /* Connection Lines */
+        .connection-line {
+            position: absolute;
+            background: linear-gradient(to bottom, rgba(59, 130, 246, 0.5), transparent);
+            z-index: 5;
+            transform-origin: center top;
+        }
+
+        /* Line 1: Center to Top */
+        .line-1 {
+            width: 2px;
+            height: 110px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -100%) translateY(-110px);
+            background: linear-gradient(to top, #3b82f6, rgba(59, 130, 246, 0.1));
+        }
+
+        /* Line 2: Center to Bottom Left */
+        .line-2 {
+            width: 2px;
+            height: 180px;
+            top: 50%;
+            left: 50%;
+            transform: rotate(150deg) translate(0, 110px);
+            background: linear-gradient(to bottom, #3b82f6, rgba(59, 130, 246, 0.1));
+            transform-origin: top center;
+        }
+
+        /* Line 3: Center to Bottom Right */
+        .line-3 {
+            width: 2px;
+            height: 180px;
+            top: 50%;
+            left: 50%;
+            transform: rotate(-150deg) translate(0, 110px);
+            background: linear-gradient(to bottom, #3b82f6, rgba(59, 130, 246, 0.1));
+            transform-origin: top center;
+        }
+
+        /* Moving dots on lines */
+        .flow-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #60a5fa;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #60a5fa;
+            z-index: 6;
+        }
+
+        .dot-1 {
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -110px);
+            animation: flowUp 3s infinite;
+        }
+
+        .dot-2 {
+            left: 50%;
+            top: 50%;
+            animation: flowLeft 3s infinite 1s;
+        }
+
+        .dot-3 {
+            left: 50%;
+            top: 50%;
+            animation: flowRight 3s infinite 2s;
+        }
+
+        @keyframes flowUp {
+            0% {
+                transform: translate(-50%, -110px);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -220px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes flowLeft {
+            0% {
+                transform: translate(-50%, -50%) rotate(150deg) translate(0, 110px);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) rotate(150deg) translate(0, 290px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes flowRight {
+            0% {
+                transform: translate(-50%, -50%) rotate(-150deg) translate(0, 110px);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) rotate(-150deg) translate(0, 290px);
+                opacity: 0;
+            }
+        }
+
+        /* Content Styles */
+        .sat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: #94a3b8;
+            flex-shrink: 0;
+        }
+
+        .node-1 .sat-icon {
+            color: #34d399;
+            border-color: rgba(52, 211, 153, 0.3);
+            background: rgba(52, 211, 153, 0.1);
+        }
+
+        .node-2 .sat-icon {
+            color: #f472b6;
+            border-color: rgba(244, 114, 182, 0.3);
+            background: rgba(244, 114, 182, 0.1);
+        }
+
+        .node-3 .sat-icon {
+            color: #c084fc;
+            border-color: rgba(192, 132, 252, 0.3);
+            background: rgba(192, 132, 252, 0.1);
+        }
+
+        .sat-content h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        .sat-content p {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+
+        .synconic-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+            margin-bottom: 2px;
+            display: block;
+        }
+
+        /* Integration Badge */
+        .integration-badge {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .integration-badge img {
+            height: 24px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container">
+        <!-- Background -->
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <!-- Header -->
+        <div class="px-12 pt-10 pb-2 z-20 relative">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-8 h-1 bg-blue-500 rounded-full"></div>
+                <span class="text-blue-400 font-bold tracking-widest text-sm uppercase">Strategic Fit</span>
+            </div>
+            <h1 class="text-4xl font-bold text-white mb-2">
+                The SYNCONIC Ecosystem
+            </h1>
+            <p class="text-slate-400 text-lg">A complete digital infrastructure for fuel businesses.</p>
+        </div>
+        <!-- Hub Visualization -->
+        <div class="hub-container">
+            <!-- Connecting Lines -->
+            <div class="line-1"></div>
+            <div class="line-2"></div>
+            <div class="line-3"></div>
+            <!-- Flow Dots -->
+            <div class="flow-dot dot-1"></div>
+            <div class="flow-dot dot-2"></div>
+            <div class="flow-dot dot-3"></div>
+            <!-- Center Node -->
+            <div class="center-node">
+                <div class="center-logo">FUELOPS</div>
+                <div class="center-sub">Core Engine</div>
+            </div>
+            <!-- Satellite Nodes -->
+            <!-- Node 1: Accounting -->
+            <div class="satellite-node node-1">
+                <div class="sat-icon">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                </div>
+                <div class="sat-content">
+                    <span class="synconic-label">SYNCONIC</span>
+                    <h3>Accounting</h3>
+                    <p>Automated P&amp;L sync from daily station sales &amp; expense data.</p>
+                </div>
+            </div>
+            <!-- Node 2: Payroll -->
+            <div class="satellite-node node-2">
+                <div class="sat-icon">
+                    <i class="fas fa-users-cog"></i>
+                </div>
+                <div class="sat-content">
+                    <span class="synconic-label">SYNCONIC</span>
+                    <h3>Payroll</h3>
+                    <p>Staff shift data linked directly to attendance &amp; salary processing.</p>
+                </div>
+            </div>
+            <!-- Node 3: ERP -->
+            <div class="satellite-node node-3">
+                <div class="sat-icon">
+                    <i class="fas fa-building"></i>
+                </div>
+                <div class="sat-content">
+                    <span class="synconic-label">SYNCONIC</span>
+                    <h3>Enterprise ERP</h3>
+                    <p>Inventory procurement and multi-branch logistics management.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Footer -->
+        <div class="absolute bottom-8 right-12 flex items-center gap-4 z-20">
+            <div class="h-[1px] w-12 bg-slate-700"></div>
+            <span class="text-slate-600 font-mono text-sm">14</span>
+        </div>
+    </div>
+<script src='navigation.js'></script>
+</body>
+
+</html>
+

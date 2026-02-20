@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Call to Action - FUELOPS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background-color: #0B1120;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B1120;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        .brand-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Background Pattern - Grid Dots */
+        .bg-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.15;
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1' fill='%233b82f6' fill-opacity='0.4'/%3E%3C/svg%3E");
+        }
+
+        /* Ambient Glow */
+        .glow-effect {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background-color: #3b82f6;
+            filter: blur(150px);
+            opacity: 0.08;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        }
+
+        /* Central Card */
+        .cta-card {
+            position: relative;
+            z-index: 10;
+            background-color: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 32px;
+            padding: 60px;
+            max-width: 900px;
+            width: 100%;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-card::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            border-radius: 32px;
+            padding: 1px;
+            background: linear-gradient(45deg, rgba(59, 130, 246, 0.5), transparent, rgba(59, 130, 246, 0.5));
+            /* Note: Gradients on borders/masks are generally safe for export if main background is solid, 
+               but replacing with solid border for strict compliance */
+            background: transparent;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .headline {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+
+        .highlight-text {
+            color: #60a5fa;
+            position: relative;
+            display: inline-block;
+        }
+
+        .sub-headline {
+            font-size: 1.25rem;
+            color: #cbd5e1;
+            margin-bottom: 48px;
+            font-weight: 300;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        /* Button Styling */
+        .cta-button {
+            background-color: #3b82f6;
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            padding: 20px 48px;
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+            border: 2px solid #3b82f6;
+            cursor: pointer;
+            margin-bottom: 60px;
+        }
+
+        .cta-button:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Contact Info */
+        .contact-row {
+            display: flex;
+            gap: 40px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+            width: 100%;
+            justify-content: center;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #94a3b8;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .contact-item:hover {
+            color: white;
+        }
+
+        .contact-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #60a5fa;
+            font-size: 0.9rem;
+        }
+
+        /* Decorative Elements */
+        .decor-circle {
+            position: absolute;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .dc-1 {
+            width: 600px;
+            height: 600px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .dc-2 {
+            width: 900px;
+            height: 900px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-style: dashed;
+            opacity: 0.5;
+        }
+
+        .synconic-badge {
+            position: absolute;
+            bottom: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: #64748b;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container">
+        <!-- Background Layers -->
+        <div class="bg-pattern"></div>
+        <div class="glow-effect"></div>
+        <div class="decor-circle dc-1"></div>
+        <div class="decor-circle dc-2"></div>
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col justify-center items-center z-10 px-12">
+            <div class="cta-card">
+                <!-- Header Icon -->
+                <div
+                    class="mb-6 w-16 h-16 bg-blue-500/10 rounded-2xl flex items-center justify-center border border-blue-500/20 text-blue-400 text-2xl">
+                    <i class="fas fa-gas-pump"></i>
+                </div>
+                <!-- Headlines -->
+                <div class="mb-2">
+                    <h1 class="headline">
+                        Digitize your fuel station.<br />
+                        <span class="highlight-text">Eliminate leakages.</span>
+                    </h1>
+                </div>
+                <div>
+                    <p class="sub-headline">
+                        See your real profit every day. Join the future of fuel retail infrastructure.
+                    </p>
+                </div>
+                <!-- CTA Button -->
+                <div class="cta-button">
+                    <span>Book a Live Demo Today</span>
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                <!-- Contact Details -->
+                <div class="contact-row">
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                        <span>info@synconic.net</span>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                        <span>+94 713387842</span>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-globe"></i></div>
+                        <span>synconic.net</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer / Branding -->
+            <div class="absolute bottom-8 w-full text-center">
+                <p class="text-slate-600 text-xs tracking-[0.3em] uppercase font-bold">
+                    Powered by <span class="text-slate-400">SYNCONIC</span>
+                </p>
+            </div>
+        </div>
+        <!-- Page Number -->
+        <div class="absolute bottom-8 right-12 flex items-center gap-4 z-20">
+            <div class="h-[1px] w-12 bg-slate-700"></div>
+            <span class="text-slate-600 font-mono text-sm">20</span>
+        </div>
+    </div>
+    <script src='navigation.js'></script>
+</body>
+
+</html>

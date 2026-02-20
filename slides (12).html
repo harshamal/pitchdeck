@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Market Expansion - FUELOPS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/map/js/world.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background-color: #0B1120;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B1120;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        .brand-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Map Container */
+        #expansion-map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Overlay Content */
+        .content-overlay {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            pointer-events: none;
+            /* Let clicks pass through to map where possible */
+        }
+
+        .header-section {
+            padding: 2.5rem 3rem 1rem 3rem;
+            pointer-events: auto;
+            background: linear-gradient(to bottom, #0B1120 0%, rgba(11, 17, 32, 0) 100%);
+        }
+
+        /* Phase Cards Container */
+        .phases-container {
+            position: absolute;
+            bottom: 3rem;
+            left: 3rem;
+            display: flex;
+            gap: 1.5rem;
+            pointer-events: auto;
+            width: calc(100% - 6rem);
+        }
+
+        .phase-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            flex: 1;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase-card:hover {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .phase-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+
+        .phase-1 .phase-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .phase-2 .phase-badge {
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .phase-3 .phase-badge {
+            background: rgba(168, 85, 247, 0.1);
+            color: #c084fc;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+
+        .phase-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-desc {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .market-stats {
+            display: flex;
+            gap: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 0.75rem;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-val {
+            font-weight: 700;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .stat-lbl {
+            font-size: 0.7rem;
+            color: #64748b;
+        }
+
+        /* Progress indicator connecting cards */
+        .connector-line {
+            position: absolute;
+            top: 50%;
+            right: -1.5rem;
+            width: 1.5rem;
+            height: 2px;
+            background: rgba(148, 163, 184, 0.2);
+            transform: translateY(-50%);
+            display: none;
+            /* Hidden for now, gap handles spacing */
+        }
+
+        /* Legend / Map Controls */
+        .map-legend {
+            position: absolute;
+            top: 3rem;
+            right: 3rem;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(8px);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            pointer-events: auto;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+        }
+
+        .legend-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container">
+        <!-- ECharts Map Layer -->
+        <div id="expansion-map"></div>
+        <!-- Content Overlay -->
+        <div class="content-overlay">
+            <div class="header-section">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-8 h-1 bg-blue-500 rounded-full"></div>
+                    <span class="text-blue-400 font-bold tracking-widest text-sm uppercase">Global Expansion</span>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-2 shadow-black drop-shadow-lg">
+                    From Sri Lanka to the World
+                </h1>
+                <p class="text-slate-300 text-lg max-w-2xl drop-shadow-md">
+                    Replicating success in emerging markets with similar manual fuel station infrastructure.
+                </p>
+            </div>
+            <!-- Legend -->
+            <div class="map-legend">
+                <div class="legend-item">
+                    <div class="dot bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.5)]"></div>
+                    <span>Phase 1: Validated (Live)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="dot bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.5)]"></div>
+                    <span>Phase 2: Scaling Now</span>
+                </div>
+                <div class="legend-item">
+                    <div class="dot bg-purple-400 shadow-[0_0_10px_rgba(192,132,252,0.5)]"></div>
+                    <span>Phase 3: Future Targets</span>
+                </div>
+            </div>
+            <!-- Phase Cards -->
+            <div class="phases-container">
+                <!-- Phase 1 -->
+                <div class="phase-card phase-1">
+                    <span class="phase-badge">Phase 1</span>
+                    <h3 class="phase-title">Sri Lanka</h3>
+                    <p class="phase-desc">Home market validation. Refining the product with local station owners and
+                        franchise networks.</p>
+                    <div class="market-stats">
+                        <div class="stat">
+                            <span class="stat-val">1,300+</span>
+                            <span class="stat-lbl">Stations</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-val">100%</span>
+                            <span class="stat-lbl">Fit</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Phase 2 -->
+                <div class="phase-card phase-2">
+                    <span class="phase-badge">Phase 2</span>
+                    <h3 class="phase-title">South Asia</h3>
+                    <p class="phase-desc">Immediate expansion into markets with high volume and identical regulatory
+                        frameworks.</p>
+                    <div class="market-stats">
+                        <div class="stat">
+                            <span class="stat-val">India, BD, PK</span>
+                            <span class="stat-lbl">Key Markets</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-val">85k+</span>
+                            <span class="stat-lbl">Stations</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Phase 3 -->
+                <div class="phase-card phase-3">
+                    <span class="phase-badge">Phase 3</span>
+                    <h3 class="phase-title">Africa &amp; SE Asia</h3>
+                    <p class="phase-desc">High-growth developing nations transitioning from manual to digital retail
+                        systems.</p>
+                    <div class="market-stats">
+                        <div class="stat">
+                            <span class="stat-val">Nigeria, Kenya, VN</span>
+                            <span class="stat-lbl">Key Markets</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-val">$45B+</span>
+                            <span class="stat-lbl">Market Size</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer -->
+        <div class="absolute bottom-8 right-12 flex items-center gap-4 z-20">
+            <div class="h-[1px] w-12 bg-slate-700"></div>
+            <span class="text-slate-600 font-mono text-sm">12</span>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var chartDom = document.getElementById('expansion-map');
+            var myChart = echarts.init(chartDom);
+            var option;
+
+            // Coordinates
+            const slCoords = [80.77, 7.87]; // Sri Lanka
+            const indiaCoords = [78.96, 20.59];
+            const bangladeshCoords = [90.35, 23.68];
+            const pakistanCoords = [69.34, 30.37];
+            const nigeriaCoords = [8.67, 9.08];
+            const kenyaCoords = [37.90, -0.02];
+            const vietnamCoords = [108.27, 14.05];
+            const indonesiaCoords = [113.92, -0.78];
+
+            option = {
+                backgroundColor: '#0B1120',
+                geo: {
+                    map: 'world',
+                    roam: false,
+                    center: [60, 10], // Centered to show Africa, S.Asia, SE.Asia well
+                    zoom: 1.8,
+                    label: {
+                        emphasis: {
+                            show: false
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            areaColor: '#1e293b', // Slate-800
+                            borderColor: '#334155', // Slate-700
+                            borderWidth: 1
+                        },
+                        emphasis: {
+                            areaColor: '#334155'
+                        }
+                    }
+                },
+                series: [
+                    // Phase 1: Sri Lanka (Origin)
+                    {
+                        name: 'Origin',
+                        type: 'effectScatter',
+                        coordinateSystem: 'geo',
+                        data: [{ name: 'Sri Lanka', value: slCoords }],
+                        symbolSize: 20,
+                        showEffectOn: 'render',
+                        rippleEffect: {
+                            brushType: 'stroke',
+                            scale: 3
+                        },
+                        itemStyle: {
+                            color: '#34d399', // Emerald-400
+                            shadowBlur: 10,
+                            shadowColor: '#34d399'
+                        },
+                        zlevel: 2
+                    },
+                    // Phase 2 Points
+                    {
+                        type: 'scatter',
+                        coordinateSystem: 'geo',
+                        data: [
+                            { name: 'India', value: indiaCoords },
+                            { name: 'Bangladesh', value: bangladeshCoords },
+                            { name: 'Pakistan', value: pakistanCoords }
+                        ],
+                        symbolSize: 12,
+                        itemStyle: {
+                            color: '#60a5fa', // Blue-400
+                            opacity: 0.9
+                        },
+                        zlevel: 2
+                    },
+                    // Phase 3 Points
+                    {
+                        type: 'scatter',
+                        coordinateSystem: 'geo',
+                        data: [
+                            { name: 'Nigeria', value: nigeriaCoords },
+                            { name: 'Kenya', value: kenyaCoords },
+                            { name: 'Vietnam', value: vietnamCoords },
+                            { name: 'Indonesia', value: indonesiaCoords }
+                        ],
+                        symbolSize: 10,
+                        itemStyle: {
+                            color: '#c084fc', // Purple-400
+                            opacity: 0.8
+                        },
+                        zlevel: 2
+                    },
+                    // Lines from SL to Phase 2
+                    {
+                        type: 'lines',
+                        zlevel: 1,
+                        effect: {
+                            show: true,
+                            period: 6,
+                            trailLength: 0.7,
+                            color: '#93c5fd', // lighter blue
+                            symbolSize: 3
+                        },
+                        lineStyle: {
+                            normal: {
+                                color: '#3b82f6',
+                                width: 0,
+                                curveness: 0.2
+                            }
+                        },
+                        data: [
+                            { coords: [slCoords, indiaCoords] },
+                            { coords: [slCoords, bangladeshCoords] },
+                            { coords: [slCoords, pakistanCoords] }
+                        ]
+                    },
+                    // Lines from SL to Phase 3
+                    {
+                        type: 'lines',
+                        zlevel: 1,
+                        effect: {
+                            show: true,
+                            period: 8,
+                            trailLength: 0.5,
+                            color: '#e9d5ff', // lighter purple
+                            symbolSize: 3
+                        },
+                        lineStyle: {
+                            normal: {
+                                color: '#a855f7',
+                                width: 0,
+                                curveness: 0.3
+                            }
+                        },
+                        data: [
+                            { coords: [slCoords, nigeriaCoords] },
+                            { coords: [slCoords, kenyaCoords] },
+                            { coords: [slCoords, vietnamCoords] },
+                            { coords: [slCoords, indonesiaCoords] }
+                        ]
+                    }
+                ]
+            };
+
+            myChart.setOption(option);
+
+            // Resize handler
+            window.addEventListener('resize', function () {
+                myChart.resize();
+            });
+        });
+    </script>
+<script src='navigation.js'></script>
+</body>
+
+</html>
+

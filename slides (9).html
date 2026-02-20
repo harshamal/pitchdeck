@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Key Differentiators - FUELOPS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background-color: #0B1120;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            background-color: #0B1120;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3,
+        .brand-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Left Panel */
+        .left-panel {
+            width: 40%;
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 10;
+            position: relative;
+        }
+
+        /* Right Panel */
+        .right-panel {
+            width: 60%;
+            padding: 3rem 4rem 3rem 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        /* Comparison Graphic on Left */
+        .comparison-box {
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 2rem;
+            position: relative;
+        }
+
+        .comparison-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .comparison-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Checklist Items */
+        .checklist-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 1.25rem;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .checklist-item:hover {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: #3b82f6;
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.2);
+        }
+
+        .checklist-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: #3b82f6;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .checklist-item:hover::before {
+            opacity: 1;
+        }
+
+        .item-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #60a5fa;
+            font-size: 1.25rem;
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .item-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+            color: white;
+        }
+
+        .item-content p {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin: 0.25rem 0 0 0;
+        }
+
+        /* Background Effects */
+        .bg-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, rgba(11, 17, 32, 0) 70%);
+            border-radius: 50%;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(#334155 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.1;
+            z-index: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container">
+        <!-- Background Elements -->
+        <div class="grid-pattern"></div>
+        <div class="bg-glow"></div>
+        <!-- Left Panel: The Argument -->
+        <div class="left-panel">
+            <div class="mb-6">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-8 h-1 bg-blue-500 rounded-full"></div>
+                    <span class="text-blue-400 font-bold tracking-widest text-sm uppercase">Key Differentiators</span>
+                </div>
+                <h1 class="text-5xl font-bold text-white leading-tight">
+                    Why We Win
+                </h1>
+            </div>
+            <p class="text-xl text-slate-300 font-light leading-relaxed mb-8">
+                Built specifically for <span class="text-white font-medium">fuel stations</span>. <br />
+                Not a generic retail POS retrofitted for the forecourt.
+            </p>
+            <!-- Comparison Visual -->
+            <div class="comparison-box border-l-4 border-l-red-500/50">
+                <span class="comparison-label text-red-400">The Other Guys</span>
+                <div class="comparison-title text-slate-400 line-through decoration-red-500/50">
+                    <i class="fas fa-cash-register text-slate-500"></i> Generic POS
+                </div>
+                <ul class="space-y-2 mt-4 text-sm text-slate-500">
+                    <li class="flex items-center gap-2"><i class="fas fa-times text-red-500/50"></i> No tank tracking
+                        logic</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-times text-red-500/50"></i> Manual inventory
+                        reconciliation</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-times text-red-500/50"></i> Single-location
+                        focused</li>
+                </ul>
+            </div>
+        </div>
+        <!-- Right Panel: The Solution Checklist -->
+        <div class="right-panel">
+            <div class="checklist-container">
+                <!-- Item 1 -->
+                <div class="checklist-item">
+                    <div class="item-icon">
+                        <i class="fas fa-gas-pump"></i>
+                    </div>
+                    <div class="item-content">
+                        <h3>Tank-to-Nozzle Tracking Logic</h3>
+                        <p>Complete reconciliation between underground storage and pump meters.</p>
+                    </div>
+                </div>
+                <!-- Item 2 -->
+                <div class="checklist-item">
+                    <div class="item-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <div class="item-content">
+                        <h3>Shift Reconciliation Engine</h3>
+                        <p>Automated closing procedures tailored to fuel attendant shifts.</p>
+                    </div>
+                </div>
+                <!-- Item 3 -->
+                <div class="checklist-item">
+                    <div class="item-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <div class="item-content">
+                        <h3>Cloud + Mobile Access</h3>
+                        <p>Real-time monitoring from anywhere, unlike on-premise legacy systems.</p>
+                    </div>
+                </div>
+                <!-- Item 4 -->
+                <div class="checklist-item">
+                    <div class="item-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <div class="item-content">
+                        <h3>Multi-Station Ready</h3>
+                        <p>Scalable architecture designed for franchise owners and large networks.</p>
+                    </div>
+                </div>
+                <!-- Item 5 -->
+                <div class="checklist-item">
+                    <div class="item-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="item-content">
+                        <h3>Modern UI/UX</h3>
+                        <p>Intuitive design requiring minimal training for station staff.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer -->
+        <div class="absolute bottom-8 right-12 flex items-center gap-4">
+            <div class="h-[1px] w-12 bg-slate-700"></div>
+            <span class="text-slate-600 font-mono text-sm">09</span>
+        </div>
+    </div>
+<script src='navigation.js'></script>
+</body>
+
+</html>
+

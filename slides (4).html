@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>The Solution - FUELOPS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background-color: #0B1120;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            background-color: #0B1120;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Background Effects */
+        .bg-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(11, 17, 32, 0) 70%);
+            border-radius: 50%;
+            top: 50%;
+            right: -200px;
+            transform: translateY(-50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3,
+        .brand-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Left Content Panel */
+        .content-panel {
+            width: 45%;
+            padding: 4rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        /* Feature List */
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            padding: 1rem;
+            background: rgba(30, 41, 59, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: rgba(30, 41, 59, 0.6);
+            border-color: rgba(59, 130, 246, 0.4);
+            transform: translateX(10px);
+        }
+
+        .check-icon {
+            width: 28px;
+            height: 28px;
+            background: rgba(16, 185, 129, 0.2);
+            color: #34D399;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        /* Right Visual Panel */
+        .visual-panel {
+            width: 55%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        /* Device Mockups CSS Only */
+        .laptop-frame {
+            width: 600px;
+            height: 380px;
+            background: #1e293b;
+            border-radius: 20px;
+            border: 2px solid #334155;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-60%, -60%);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            padding: 12px;
+            z-index: 1;
+        }
+
+        .laptop-screen {
+            width: 100%;
+            height: 100%;
+            background: #0f172a;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid #334155;
+        }
+
+        .laptop-base {
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 700px;
+            height: 20px;
+            background: #334155;
+            border-radius: 0 0 20px 20px;
+            z-index: 0;
+        }
+
+        .laptop-notch {
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 10px;
+            background: #475569;
+            border-radius: 0 0 10px 10px;
+            z-index: 1;
+        }
+
+        .mobile-frame {
+            width: 160px;
+            height: 320px;
+            background: #1e293b;
+            border-radius: 24px;
+            border: 4px solid #334155;
+            position: absolute;
+            bottom: 60px;
+            right: 60px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            z-index: 5;
+            padding: 8px;
+        }
+
+        .mobile-screen {
+            width: 100%;
+            height: 100%;
+            background: #0f172a;
+            border-radius: 18px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* UI Simulation Elements */
+        .ui-nav {
+            height: 40px;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+        }
+
+        .ui-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #475569;
+            margin-right: 6px;
+        }
+
+        .ui-sidebar {
+            width: 50px;
+            height: 100%;
+            border-right: 1px solid #334155;
+            position: absolute;
+            top: 40px;
+            left: 0;
+        }
+
+        .ui-content {
+            margin-left: 50px;
+            margin-top: 40px;
+            padding: 15px;
+        }
+
+        .ui-card {
+            background: #1e293b;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #334155;
+        }
+
+        .ui-bar {
+            height: 8px;
+            background: #334155;
+            border-radius: 4px;
+            margin-bottom: 6px;
+        }
+
+        .ui-bar.blue {
+            background: #3b82f6;
+            width: 60%;
+        }
+
+        .ui-bar.green {
+            background: #10b981;
+            width: 40%;
+        }
+
+        .ui-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 3px solid #3b82f6;
+        }
+
+        /* Floating Badge */
+        .floating-badge {
+            position: absolute;
+            background: rgba(16, 185, 129, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+            backdrop-filter: blur(4px);
+            z-index: 20;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container">
+        <!-- Background Elements -->
+        <div class="bg-glow"></div>
+        <!-- Subtle Grid Pattern -->
+        <svg class="absolute top-0 right-0 w-1/2 h-full z-0 opacity-10" height="100%" width="100%">
+            <defs>
+                <pattern height="40" id="grid" patternunits="userSpaceOnUse" width="40">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="0.5"></path>
+                </pattern>
+            </defs>
+            <rect fill="url(#grid)" height="100%" width="100%"></rect>
+        </svg>
+        <!-- Left Panel: Value Prop -->
+        <div class="content-panel">
+            <div class="mb-2">
+                <span
+                    class="px-3 py-1 bg-blue-500/10 text-blue-400 text-xs font-bold uppercase tracking-wider rounded border border-blue-500/20">The
+                    Solution</span>
+            </div>
+            <h1 class="text-6xl font-bold text-white mb-4 leading-tight">
+                FUELOPS
+            </h1>
+            <p class="text-xl text-slate-300 mb-8 font-light leading-relaxed">
+                A cloud-native management platform giving you total control from <span
+                    class="text-white font-medium">tank to bank.</span>
+            </p>
+            <div class="features-list">
+                <div class="feature-item">
+                    <div class="check-icon"><i class="fas fa-check"></i></div>
+                    <div>
+                        <h3 class="text-white font-semibold text-lg">Real-time Station Visibility</h3>
+                        <p class="text-slate-400 text-sm">Monitor tanks, pumps, and sales live.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="check-icon"><i class="fas fa-check"></i></div>
+                    <div>
+                        <h3 class="text-white font-semibold text-lg">Shift-Based Control</h3>
+                        <p class="text-slate-400 text-sm">Automated reconciliation per shift.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="check-icon"><i class="fas fa-check"></i></div>
+                    <div>
+                        <h3 class="text-white font-semibold text-lg">True Daily Profitability</h3>
+                        <p class="text-slate-400 text-sm">Know your exact P&amp;L instantly.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 flex items-center gap-4 text-slate-400 text-sm">
+                <div class="flex items-center gap-2 px-4 py-2 bg-slate-800 rounded-full border border-slate-700">
+                    <i class="fas fa-cloud text-blue-400"></i> Cloud
+                </div>
+                <div class="flex items-center gap-2 px-4 py-2 bg-slate-800 rounded-full border border-slate-700">
+                    <i class="fas fa-mobile-alt text-blue-400"></i> Mobile
+                </div>
+                <div class="flex items-center gap-2 px-4 py-2 bg-slate-800 rounded-full border border-slate-700">
+                    <i class="fas fa-desktop text-blue-400"></i> Web
+                </div>
+            </div>
+        </div>
+        <!-- Right Panel: Visual Mockup -->
+        <div class="visual-panel">
+            <!-- Laptop Mockup -->
+            <div class="laptop-frame">
+                <div class="laptop-screen">
+                    <!-- Fake UI Dashboard -->
+                    <div class="ui-nav">
+                        <div class="ui-dot" style="background:#ef4444"></div>
+                        <div class="ui-dot" style="background:#f59e0b"></div>
+                        <div class="ui-dot" style="background:#22c55e"></div>
+                        <div style="flex:1"></div>
+                        <div style="width:100px; height:8px; background:#334155; border-radius:4px;"></div>
+                    </div>
+                    <div class="ui-sidebar">
+                        <div style="width:20px; height:20px; background:#3b82f6; border-radius:4px; margin:15px auto;">
+                        </div>
+                        <div style="width:20px; height:20px; background:#334155; border-radius:4px; margin:15px auto;">
+                        </div>
+                        <div style="width:20px; height:20px; background:#334155; border-radius:4px; margin:15px auto;">
+                        </div>
+                    </div>
+                    <div class="ui-content" style="display:grid; grid-template-columns: 2fr 1fr; gap:10px;">
+                        <div>
+                            <div class="ui-card" style="height:120px;">
+                                <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                                    <div class="ui-bar" style="width:80px;"></div>
+                                    <div class="ui-bar" style="width:30px;"></div>
+                                </div>
+                                <div style="display:flex; align-items:end; gap:5px; height:60px;">
+                                    <div style="width:15%; height:40%; background:#3b82f6; border-radius:2px;"></div>
+                                    <div style="width:15%; height:70%; background:#3b82f6; border-radius:2px;"></div>
+                                    <div style="width:15%; height:50%; background:#3b82f6; border-radius:2px;"></div>
+                                    <div style="width:15%; height:90%; background:#3b82f6; border-radius:2px;"></div>
+                                    <div style="width:15%; height:60%; background:#3b82f6; border-radius:2px;"></div>
+                                </div>
+                            </div>
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                                <div class="ui-card" style="height:80px;">
+                                    <div class="ui-bar" style="width:50px;"></div>
+                                    <h4 style="color:white; font-size:20px; margin:5px 0;">12,500 L</h4>
+                                    <div class="ui-bar green" style="width:100%"></div>
+                                </div>
+                                <div class="ui-card" style="height:80px;">
+                                    <div class="ui-bar" style="width:50px;"></div>
+                                    <h4 style="color:white; font-size:20px; margin:5px 0;">$ 4,200</h4>
+                                    <div class="ui-bar blue" style="width:100%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="ui-card" style="height:210px;">
+                                <div class="ui-bar" style="width:60px; margin-bottom:15px;"></div>
+                                <div style="border-left:2px solid #334155; padding-left:10px; margin-bottom:15px;">
+                                    <div class="ui-bar" style="width:40px;"></div>
+                                    <div class="ui-bar" style="width:70px; background:#475569"></div>
+                                </div>
+                                <div style="border-left:2px solid #334155; padding-left:10px; margin-bottom:15px;">
+                                    <div class="ui-bar" style="width:40px;"></div>
+                                    <div class="ui-bar" style="width:70px; background:#475569"></div>
+                                </div>
+                                <div style="border-left:2px solid #3b82f6; padding-left:10px;">
+                                    <div class="ui-bar" style="width:40px;"></div>
+                                    <div class="ui-bar" style="width:70px; background:#475569"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="laptop-base"></div>
+                <div class="laptop-notch"></div>
+            </div>
+            <!-- Mobile Mockup -->
+            <div class="mobile-frame">
+                <div class="mobile-screen">
+                    <div style="height:20px; background:#0f172a; width:100%;"></div>
+                    <div style="padding:10px;">
+                        <div class="ui-bar" style="width:40px; margin-bottom:15px;"></div>
+                        <div class="ui-circle" style="margin:0 auto 10px auto;"></div>
+                        <div style="text-align:center; color:white; font-size:10px; margin-bottom:15px;">Stock Level
+                        </div>
+                        <div class="ui-card">
+                            <div class="ui-bar" style="width:30px;"></div>
+                            <div class="ui-bar green" style="width:80%; margin-top:5px;"></div>
+                        </div>
+                        <div class="ui-card">
+                            <div class="ui-bar" style="width:30px;"></div>
+                            <div class="ui-bar blue" style="width:60%; margin-top:5px;"></div>
+                        </div>
+                    </div>
+                    <!-- Bottom Nav -->
+                    <div
+                        style="position:absolute; bottom:0; width:100%; height:30px; border-top:1px solid #334155; display:flex; justify-content:space-around; align-items:center;">
+                        <div style="width:12px; height:12px; background:#475569; border-radius:2px;"></div>
+                        <div style="width:12px; height:12px; background:#3b82f6; border-radius:2px;"></div>
+                        <div style="width:12px; height:12px; background:#475569; border-radius:2px;"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Floating Badge -->
+            <div class="floating-badge" style="top: 35%; right: 10%;">
+                <i class="fas fa-check-circle mr-2"></i> 100% Accurate
+            </div>
+        </div>
+        <!-- Footer -->
+        <div class="absolute bottom-6 right-10 flex items-center gap-4">
+            <div class="h-[1px] w-12 bg-slate-700"></div>
+            <span class="text-slate-600 font-mono text-sm">04</span>
+        </div>
+    </div>
+<script src='navigation.js'></script>
+</body>
+
+</html>
+

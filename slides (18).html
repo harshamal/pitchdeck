@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Vision - FUELOPS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background-color: #0B1120;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B1120;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .font-space {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Background Pattern - Using SVG to avoid CSS gradients */
+        .bg-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.15;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%233b82f6' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* Ambient Glow - Using blurred div instead of radial gradient */
+        .glow-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background-color: #3b82f6;
+            opacity: 0.1;
+            filter: blur(120px);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Content Centering */
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 0 100px;
+        }
+
+        /* Quote Styling */
+        .quote-icon {
+            font-size: 4rem;
+            color: #3b82f6;
+            opacity: 0.3;
+            margin-bottom: 2rem;
+        }
+
+        .pre-text {
+            font-size: 1.75rem;
+            color: #94a3b8;
+            /* slate-400 */
+            font-weight: 300;
+            margin-bottom: 2rem;
+            letter-spacing: 0.02em;
+        }
+
+        .strikethrough-text {
+            text-decoration: line-through;
+            text-decoration-color: #ef4444;
+            text-decoration-thickness: 3px;
+            color: #64748b;
+            margin: 0 0.5rem;
+        }
+
+        .vision-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            color: white;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .vision-highlight {
+            color: #60a5fa;
+            /* blue-400 */
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Underline accent using border instead of gradient */
+        .vision-highlight::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 6px;
+            background-color: #3b82f6;
+            border-radius: 3px;
+            opacity: 0.6;
+        }
+
+        .divider-line {
+            width: 80px;
+            height: 4px;
+            background-color: #3b82f6;
+            margin: 3rem auto;
+            border-radius: 2px;
+        }
+
+        .sub-caption {
+            font-size: 1rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-weight: 600;
+        }
+
+        /* Vision Badge */
+        .vision-badge {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 8px 24px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .vision-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #3b82f6;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #3b82f6;
+        }
+
+        .vision-label {
+            color: #94a3b8;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* Abstract Nodes in Background */
+        .node {
+            position: absolute;
+            border-radius: 50%;
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            z-index: 1;
+        }
+
+        .node-1 {
+            width: 120px;
+            height: 120px;
+            top: 15%;
+            left: 10%;
+            opacity: 0.4;
+        }
+
+        .node-2 {
+            width: 80px;
+            height: 80px;
+            bottom: 20%;
+            right: 15%;
+            opacity: 0.4;
+        }
+
+        .node-3 {
+            width: 60px;
+            height: 60px;
+            top: 25%;
+            right: 25%;
+            opacity: 0.2;
+        }
+
+        .node-4 {
+            width: 150px;
+            height: 150px;
+            bottom: 10%;
+            left: 20%;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container">
+        <!-- Background Elements -->
+        <div class="bg-pattern"></div>
+        <div class="glow-center"></div>
+        <!-- Decorative Nodes -->
+        <div class="node node-1"></div>
+        <div class="node node-2"></div>
+        <div class="node node-3"></div>
+        <div class="node node-4"></div>
+        <!-- Vision Label -->
+        <div class="vision-badge">
+            <div class="vision-dot"></div>
+            <p class="vision-label">Company Vision</p>
+        </div>
+        <!-- Main Content -->
+        <div class="content-wrapper">
+            <!-- Icon -->
+            <div class="quote-icon">
+                <i class="fas fa-quote-left"></i>
+            </div>
+            <!-- Statement Part 1 -->
+            <p class="pre-text">
+                We are not just building <span class="text-slate-500">software</span>.
+            </p>
+            <!-- Statement Part 2 (Main) -->
+            <div class="relative">
+                <p class="text-2xl text-blue-400 font-mono mb-4 uppercase tracking-widest">We are building</p>
+                <h1 class="vision-text">
+                    The Digital Infrastructure
+                </h1>
+                <h1 class="vision-text">
+                    for <span class="vision-highlight">Fuel Retail</span>
+                </h1>
+            </div>
+            <!-- Divider -->
+            <div class="divider-line"></div>
+            <!-- Sub Caption -->
+            <p class="sub-caption">Connecting Pumps • Payments • People • Profit</p>
+        </div>
+        <!-- Footer -->
+        <div class="absolute bottom-8 right-12 flex items-center gap-4 z-20">
+            <div class="h-[1px] w-12 bg-slate-700"></div>
+            <span class="text-slate-600 font-mono text-sm">18</span>
+        </div>
+    </div>
+<script src='navigation.js'></script>
+</body>
+
+</html>
+

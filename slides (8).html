@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Value Proposition - FUELOPS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background-color: #0B1120;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B1120;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3,
+        .brand-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Grid Layout */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            padding: 20px 60px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .benefits-grid-bottom {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            padding: 0 60px;
+            margin-top: 24px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Tile Design */
+        .benefit-tile {
+            background-color: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .benefits-grid-bottom .benefit-tile {
+            width: calc(33.333% - 16px);
+            /* Match width of top row tiles */
+        }
+
+        /* Icon Styling */
+        .icon-container {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .benefit-tile:hover .icon-container {
+            transform: scale(1.1);
+        }
+
+        /* Text Styling */
+        .tile-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .tile-desc {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #94a3b8;
+        }
+
+        /* Specific Theme Colors */
+        /* Profit - Green */
+        .theme-profit .icon-container {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .theme-profit:hover {
+            border-color: rgba(16, 185, 129, 0.4);
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+
+        /* Leakage - Red/Rose */
+        .theme-leakage .icon-container {
+            background-color: rgba(244, 63, 94, 0.1);
+            color: #fb7185;
+            border: 1px solid rgba(244, 63, 94, 0.2);
+        }
+
+        .theme-leakage:hover {
+            border-color: rgba(244, 63, 94, 0.4);
+            background-color: rgba(244, 63, 94, 0.05);
+        }
+
+        /* Staff - Purple */
+        .theme-staff .icon-container {
+            background-color: rgba(168, 85, 247, 0.1);
+            color: #c084fc;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+
+        .theme-staff:hover {
+            border-color: rgba(168, 85, 247, 0.4);
+            background-color: rgba(168, 85, 247, 0.05);
+        }
+
+        /* Remote - Blue */
+        .theme-remote .icon-container {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .theme-remote:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        /* Decisions - Amber */
+        .theme-decisions .icon-container {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .theme-decisions:hover {
+            border-color: rgba(245, 158, 11, 0.4);
+            background-color: rgba(245, 158, 11, 0.05);
+        }
+
+        /* Checkmark list style for tile description if needed */
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+
+        /* Background shapes */
+        .bg-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.4;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container">
+        <!-- Background Elements -->
+        <svg class="absolute top-0 right-0 w-full h-full z-0 opacity-20 pointer-events-none" height="100%" width="100%">
+            <defs>
+                <pattern height="40" id="grid" patternunits="userSpaceOnUse" width="40">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#334155" stroke-width="0.5"></path>
+                </pattern>
+            </defs>
+            <rect fill="url(#grid)" height="100%" width="100%"></rect>
+        </svg>
+        <div class="bg-shape"
+            style="top: -100px; right: -100px; width: 500px; height: 500px; background-color: rgba(59, 130, 246, 0.15);">
+        </div>
+        <div class="bg-shape"
+            style="bottom: -100px; left: -100px; width: 600px; height: 600px; background-color: rgba(16, 185, 129, 0.1);">
+        </div>
+        <!-- Header -->
+        <div class="px-12 pt-10 pb-2 z-20">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-8 h-1 bg-blue-500 rounded-full"></div>
+                <span class="text-blue-400 font-bold tracking-widest text-sm uppercase">Value Proposition</span>
+            </div>
+            <div class="flex justify-between items-end">
+                <h1 class="text-4xl font-bold text-white">
+                    Why Owners Choose FUELOPS
+                </h1>
+                <p class="text-slate-400 text-lg">Delivering control, clarity, and cash flow.</p>
+            </div>
+        </div>
+        <!-- Content Area -->
+        <div class="flex-1 flex flex-col justify-center pb-12">
+            <!-- Top Row -->
+            <div class="benefits-grid">
+                <!-- 1. Real Daily Profit -->
+                <div class="benefit-tile theme-profit">
+                    <div class="icon-container">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="tile-title">Real Daily Profit</h3>
+                    <p class="tile-desc">Stop guessing. Know your exact P&amp;L instantly without waiting for delayed
+                        end-of-month accountant reports.</p>
+                    <div class="check-item">
+                        <i class="fas fa-check-circle text-emerald-400"></i>
+                        <span>100% Financial Clarity</span>
+                    </div>
+                </div>
+                <!-- 2. Eliminate Leakages -->
+                <div class="benefit-tile theme-leakage">
+                    <div class="icon-container">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="tile-title">Eliminate Leakages</h3>
+                    <p class="tile-desc">Identify stock variances immediately. Detect fuel theft, calibration issues, or
+                        delivery shortages before they cost you.</p>
+                    <div class="check-item">
+                        <i class="fas fa-check-circle text-rose-400"></i>
+                        <span>Stop Stock Loss</span>
+                    </div>
+                </div>
+                <!-- 3. Staff Performance -->
+                <div class="benefit-tile theme-staff">
+                    <div class="icon-container">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="tile-title">Monitor Staff</h3>
+                    <p class="tile-desc">Track attendant sales performance, identify cash shortages per shift, and
+                        improve overall team accountability.</p>
+                    <div class="check-item">
+                        <i class="fas fa-check-circle text-purple-400"></i>
+                        <span>Enhanced Accountability</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Bottom Row -->
+            <div class="benefits-grid-bottom">
+                <!-- 4. Remote Operations -->
+                <div class="benefit-tile theme-remote">
+                    <div class="icon-container">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="tile-title">Remote Multi-Station</h3>
+                    <p class="tile-desc">Manage one station or fifty from a single dashboard. Access your operations
+                        from anywhere via cloud and mobile.</p>
+                </div>
+                <!-- 5. Data-Driven -->
+                <div class="benefit-tile theme-decisions">
+                    <div class="icon-container">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="tile-title">Data-Driven Decisions</h3>
+                    <p class="tile-desc">Move from gut-feeling management to precision operations. Use historical data
+                        to forecast orders and optimize cash flow.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Footer -->
+        <div class="absolute bottom-8 right-12 flex items-center gap-4">
+            <div class="h-[1px] w-12 bg-slate-700"></div>
+            <span class="text-slate-600 font-mono text-sm">08</span>
+        </div>
+    </div>
+<script src='navigation.js'></script>
+</body>
+
+</html>
+

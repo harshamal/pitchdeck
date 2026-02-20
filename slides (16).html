@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>ROI - FUELOPS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background-color: #0B1120;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B1120;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        .brand-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* KPI Grid */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            padding: 20px 60px;
+            margin-top: 40px;
+            z-index: 10;
+        }
+
+        .kpi-card {
+            background-color: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 20px;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-10px);
+            background-color: rgba(30, 41, 59, 0.6);
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .kpi-icon-wrapper {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            font-size: 1.75rem;
+            border: 1px solid transparent;
+        }
+
+        .kpi-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .kpi-label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .kpi-desc {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            line-height: 1.5;
+            max-width: 200px;
+        }
+
+        /* Specific Colors */
+        .card-variance .kpi-icon-wrapper {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .card-variance .kpi-value {
+            color: #f87171;
+        }
+
+        .card-profit .kpi-icon-wrapper {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+            border-color: rgba(16, 185, 129, 0.2);
+        }
+
+        .card-profit .kpi-value {
+            color: #34d399;
+        }
+
+        .card-time .kpi-icon-wrapper {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .card-time .kpi-value {
+            color: #60a5fa;
+        }
+
+        .card-payback .kpi-icon-wrapper {
+            background-color: rgba(251, 191, 36, 0.1);
+            color: #fbbf24;
+            border-color: rgba(251, 191, 36, 0.2);
+        }
+
+        .card-payback .kpi-value {
+            color: #fbbf24;
+        }
+
+        /* Impact Section */
+        .impact-section {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+            padding: 0 60px;
+            z-index: 10;
+        }
+
+        .impact-statement {
+            background-color: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 16px;
+            padding: 32px 48px;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            max-width: 1000px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .impact-text {
+            font-size: 1.25rem;
+            color: #e2e8f0;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            color: #60a5fa;
+            font-weight: 700;
+            background-color: rgba(59, 130, 246, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* Background elements */
+        .bg-glow-1 {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background-color: rgba(59, 130, 246, 0.05);
+            top: -200px;
+            right: -100px;
+            z-index: 0;
+            filter: blur(80px);
+        }
+
+        .bg-glow-2 {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background-color: rgba(16, 185, 129, 0.03);
+            bottom: -100px;
+            left: -100px;
+            z-index: 0;
+            filter: blur(80px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container">
+        <!-- Background Decor -->
+        <div class="bg-glow-1"></div>
+        <div class="bg-glow-2"></div>
+        <!-- Header -->
+        <div class="px-12 pt-10 pb-4 z-20">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-8 h-1 bg-blue-500 rounded-full"></div>
+                <span class="text-blue-400 font-bold tracking-widest text-sm uppercase">Return on Investment</span>
+            </div>
+            <h1 class="text-4xl font-bold text-white mb-2">
+                The System Pays for Itself
+            </h1>
+            <p class="text-slate-400 text-lg">
+                Measurable financial impact from day one of deployment.
+            </p>
+        </div>
+        <!-- KPI Grid -->
+        <div class="kpi-grid">
+            <!-- Variance Reduction -->
+            <div class="kpi-card card-variance">
+                <div class="kpi-icon-wrapper">
+                    <i class="fas fa-arrow-trend-down"></i>
+                </div>
+                <div class="kpi-value">-95%</div>
+                <div class="kpi-label">Stock Loss</div>
+                <div class="kpi-desc">Eliminate theft, leakage, and calibration errors instantly.</div>
+            </div>
+            <!-- Profit Margin -->
+            <div class="kpi-card card-profit">
+                <div class="kpi-icon-wrapper">
+                    <i class="fas fa-hand-holding-dollar"></i>
+                </div>
+                <div class="kpi-value">+12%</div>
+                <div class="kpi-label">Net Margin</div>
+                <div class="kpi-desc">Increase daily profitability through tighter inventory control.</div>
+            </div>
+            <!-- Admin Time -->
+            <div class="kpi-card card-time">
+                <div class="kpi-icon-wrapper">
+                    <i class="fas fa-hourglass-half"></i>
+                </div>
+                <div class="kpi-value">15h</div>
+                <div class="kpi-label">Saved / Week</div>
+                <div class="kpi-desc">Automated shift reconciliation and daily reporting.</div>
+            </div>
+            <!-- Payback Period -->
+            <div class="kpi-card card-payback">
+                <div class="kpi-icon-wrapper">
+                    <i class="fas fa-rotate"></i>
+                </div>
+                <div class="kpi-value">&lt;3mo</div>
+                <div class="kpi-label">ROI Period</div>
+                <div class="kpi-desc">Subscription cost covered by leakage prevention alone.</div>
+            </div>
+        </div>
+        <!-- Impact Summary -->
+        <div class="impact-section">
+            <div class="impact-statement">
+                <div class="text-5xl text-blue-500 opacity-50">
+                    <i class="fas fa-quote-left"></i>
+                </div>
+                <div class="impact-text">
+                    For an average station selling 10,000L daily, preventing just <span class="highlight">0.5%</span> of
+                    stock loss covers the entire FUELOPS monthly subscription cost <span class="highlight">3x
+                        over</span>.
+                </div>
+            </div>
+        </div>
+        <!-- Footer -->
+        <div class="absolute bottom-8 right-12 flex items-center gap-4 z-20">
+            <div class="h-[1px] w-12 bg-slate-700"></div>
+            <span class="text-slate-600 font-mono text-sm">16</span>
+        </div>
+    </div>
+<script src='navigation.js'></script>
+</body>
+
+</html>
+

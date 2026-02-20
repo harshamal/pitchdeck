@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>AI Roadmap - FUELOPS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background-color: #0B1120;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B1120;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        h1,
+        h2,
+        h3,
+        .brand-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Background Effects */
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 2px 2px, rgba(59, 130, 246, 0.15) 1px, transparent 0);
+            background-size: 40px 40px;
+            z-index: 0;
+        }
+
+        .bg-glow-main {
+            position: absolute;
+            width: 1200px;
+            height: 1200px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Roadmap Container */
+        .roadmap-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5%;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* The Evolution Path - Dynamic Gradient Beam */
+        .evolution-path {
+            position: absolute;
+            top: 50%;
+            left: 5%;
+            right: 5%;
+            height: 2px;
+            background: linear-gradient(90deg,
+                    rgba(59, 130, 246, 0) 0%,
+                    #3b82f6 10%,
+                    #a855f7 50%,
+                    #ec4899 90%,
+                    rgba(236, 72, 153, 0) 100%);
+            z-index: 1;
+        }
+
+        .evolution-path::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            background: inherit;
+            filter: blur(12px);
+            opacity: 0.4;
+        }
+
+        /* Milestone Modules */
+        .milestone-module {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 30%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .milestone-card {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 1.5rem 1.75rem;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .milestone-module:hover .milestone-card {
+            transform: translateY(-12px);
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(15, 23, 42, 0.9);
+            box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.8), 0 0 20px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Connector Node with Pulse */
+        .connector-node {
+            width: 44px;
+            height: 44px;
+            background: #0f172a;
+            border: 2px solid currentColor;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            margin: 1.5rem 0;
+            position: relative;
+            box-shadow: 0 0 25px currentColor;
+        }
+
+        .node-pulse {
+            position: absolute;
+            inset: -12px;
+            border-radius: 50%;
+            border: 1px solid currentColor;
+            opacity: 0.6;
+            animation: pulse-ring 2.5s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(1.6);
+                opacity: 0;
+            }
+        }
+
+        /* Specific Color Tokens */
+        .m-now {
+            color: #3b82f6;
+        }
+
+        /* Blue */
+        .m-next {
+            color: #a855f7;
+        }
+
+        /* Purple */
+        .m-future {
+            color: #ec4899;
+        }
+
+        /* Pink */
+
+        /* Icon Styling */
+        .icon-box {
+            width: 54px;
+            height: 54px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.25rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+        }
+
+        .m-now .icon-box {
+            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .m-next .icon-box {
+            color: #a855f7;
+            background: rgba(168, 85, 247, 0.05);
+        }
+
+        .m-future .icon-box {
+            color: #ec4899;
+            background: rgba(236, 72, 153, 0.05);
+        }
+
+        /* Typography & List */
+        .status-tag {
+            font-size: 0.7rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            padding: 5px 12px;
+            border-radius: 100px;
+            background: rgba(255, 255, 255, 0.06);
+            margin-bottom: 1.25rem;
+            display: inline-block;
+        }
+
+        .module-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            color: white;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+            color: #94a3b8;
+            margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+
+        .milestone-module:hover .feature-item {
+            color: #e2e8f0;
+        }
+
+        .feature-item i {
+            font-size: 0.8rem;
+            opacity: 0.5;
+            color: currentColor;
+        }
+
+        /* Layout Structure */
+        .milestones-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Decorative Orbitals */
+        .orbital {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container">
+        <!-- Background Architecture -->
+        <div class="bg-grid"></div>
+        <div class="bg-glow-main"></div>
+        <div class="orbital" style="width: 800px; height: 800px;"></div>
+        <div class="orbital" style="width: 1200px; height: 1200px;"></div>
+
+        <!-- Header -->
+        <div class="px-12 pt-12 z-20 relative">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-[2px] bg-blue-500 rounded-full shadow-[0_0_10px_#3b82f6]"></div>
+                <span class="text-blue-400 font-bold tracking-[0.4em] text-xs uppercase">Future Roadmap</span>
+            </div>
+            <div class="flex justify-between items-end">
+                <div>
+                    <h1 class="text-5xl font-bold text-white mb-3">
+                        The Intelligence <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Evolution</span>
+                    </h1>
+                    <p class="text-slate-400 text-xl font-light max-w-2xl">
+                        A phased transition from operational recording to autonomous, AI-driven profit maximization.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Roadmap -->
+        <div class="roadmap-container">
+            <div class="evolution-path"></div>
+
+            <div class="milestones-wrapper">
+
+                <!-- PHASE 1 -->
+                <div class="milestone-module m-now">
+                    <div class="milestone-card shadow-blue-500/5">
+                        <div class="icon-box">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <span class="status-tag" style="background: rgba(59, 130, 246, 0.1);">Now: Phase 1</span>
+                        <h3 class="module-name">Digital Foundation</h3>
+                        <div class="space-y-4">
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Real-time Tank & Pump Sync
+                            </div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Automated Reconciliation</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Multi-Station HQ Control</div>
+                            <div class="feature-item"><i class="fas fa-check-circle"></i> Shift-Based Digital Ledger
+                            </div>
+                        </div>
+                    </div>
+                    <div class="connector-node">
+                        <i class="fas fa-play text-xs"></i>
+                        <div class="node-pulse"></div>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-sm font-bold text-white">Live Operations</p>
+                        <p class="text-[10px] text-slate-500 font-mono tracking-widest uppercase mt-1">Version 1.0
+                            Deployable</p>
+                    </div>
+                </div>
+
+                <!-- PHASE 2 -->
+                <div class="milestone-module m-next">
+                    <div class="text-center mb-0 opacity-80">
+                        <p class="text-sm font-bold text-white">6 - 12 Months</p>
+                        <p class="text-[10px] text-slate-500 font-mono tracking-widest uppercase mt-1">Predictive
+                            Intelligence</p>
+                    </div>
+                    <div class="connector-node">
+                        <i class="fas fa-brain text-xs"></i>
+                    </div>
+                    <div class="milestone-card shadow-purple-500/5">
+                        <div class="icon-box">
+                            <i class="fas fa-wand-magic-sparkles"></i>
+                        </div>
+                        <span class="status-tag" style="background: rgba(168, 85, 247, 0.1);">Future: Phase 2</span>
+                        <h3 class="module-name">Predictive Automation</h3>
+                        <div class="space-y-4">
+                            <div class="feature-item"><i class="fas fa-square-poll-vertical"></i> AI Demand Forecasting
+                            </div>
+                            <div class="feature-item"><i class="fas fa-square-poll-vertical"></i> Smart Inventory
+                                Reordering</div>
+                            <div class="feature-item"><i class="fas fa-square-poll-vertical"></i> Anomaly & Fraud
+                                Detection</div>
+                            <div class="feature-item"><i class="fas fa-square-poll-vertical"></i> Dynamic Margin
+                                Optimization</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PHASE 3 -->
+                <div class="milestone-module m-future">
+                    <div class="milestone-card shadow-pink-500/5">
+                        <div class="icon-box">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <span class="status-tag" style="background: rgba(236, 72, 153, 0.1);">Vision: Phase 3</span>
+                        <h3 class="module-name">Station Auto-Pilot</h3>
+                        <div class="space-y-4">
+                            <div class="feature-item"><i class="fas fa-infinity"></i> Autonomous Fuel Procurement</div>
+                            <div class="feature-item"><i class="fas fa-infinity"></i> Edge-Computing Pump IoT</div>
+                            <div class="feature-item"><i class="fas fa-infinity"></i> AI Customer Personalization</div>
+                            <div class="feature-item"><i class="fas fa-infinity"></i> Predictive Profit Engine</div>
+                        </div>
+                    </div>
+                    <div class="connector-node">
+                        <i class="fas fa-star text-xs"></i>
+                    </div>
+                    <div class="text-center opacity-60">
+                        <p class="text-sm font-bold text-white">18+ Months</p>
+                        <p class="text-[10px] text-slate-500 font-mono tracking-widest uppercase mt-1">Enterprise
+                            Ecosystem</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="absolute bottom-10 right-12 flex items-center gap-4 z-50">
+            <div class="h-[1px] w-12 bg-slate-700"></div>
+            <span class="text-slate-600 font-mono text-sm font-bold">13</span>
+        </div>
+    </div>
+
+    <script src='navigation.js'></script>
+</body>
+
+</html>

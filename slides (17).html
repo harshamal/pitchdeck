@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Go-To-Market Strategy - FUELOPS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background-color: #0B1120;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #0B1120;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        .brand-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Background Pattern */
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .bg-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background-color: rgba(59, 130, 246, 0.05);
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Funnel Container */
+        .funnel-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            padding: 0 60px;
+            margin-top: 40px;
+            z-index: 10;
+            height: 450px;
+        }
+
+        /* Channel Column (Left) */
+        .channels-col {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            width: 320px;
+        }
+
+        .channel-card {
+            background-color: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .channel-card:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            background-color: rgba(30, 41, 59, 0.6);
+            transform: translateX(5px);
+        }
+
+        .channel-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .channel-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: white;
+        }
+
+        .channel-desc {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+
+        /* Process Arrow */
+        .process-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #475569;
+            font-size: 1.5rem;
+        }
+
+        /* Conversion Process (Center) */
+        .process-col {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 340px;
+            position: relative;
+        }
+
+        /* Connecting line for process steps */
+        .process-line {
+            position: absolute;
+            left: 24px;
+            top: 40px;
+            bottom: 40px;
+            width: 2px;
+            background-color: #334155;
+            z-index: 0;
+        }
+
+        .process-step {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background-color: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 16px;
+            border-radius: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: #0f172a;
+            border: 2px solid #3b82f6;
+            color: #3b82f6;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+        }
+
+        .step-content h4 {
+            font-weight: 600;
+            color: white;
+            margin-bottom: 4px;
+            font-size: 1rem;
+        }
+
+        .step-content p {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin: 0;
+        }
+
+        /* Campaign Box (Right) */
+        .campaign-col {
+            width: 320px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .campaign-card {
+            background-color: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 20px;
+            padding: 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 300px;
+            width: 100%;
+        }
+
+        .campaign-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background-color: #3b82f6;
+        }
+
+        .campaign-icon {
+            font-size: 3rem;
+            color: #60a5fa;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        .campaign-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .campaign-tag {
+            background-color: #3b82f6;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 16px;
+        }
+
+        .campaign-desc {
+            font-size: 0.9rem;
+            color: #bfdbfe;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Arrows between columns */
+        .arrow-divider {
+            color: #475569;
+            font-size: 1.5rem;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container">
+        <!-- Background -->
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <!-- Header -->
+        <div class="px-12 pt-10 pb-4 z-20">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-8 h-1 bg-blue-500 rounded-full"></div>
+                <span class="text-blue-400 font-bold tracking-widest text-sm uppercase">Go-To-Market Strategy</span>
+            </div>
+            <h1 class="text-4xl font-bold text-white mb-2">
+                Accelerating Adoption
+            </h1>
+            <p class="text-slate-400 text-lg">
+                A multi-channel approach to rapidly digitize the Sri Lankan fuel retail network.
+            </p>
+        </div>
+        <!-- Strategy Flow -->
+        <div class="funnel-container">
+            <!-- Column 1: Channels -->
+            <div class="channels-col">
+                <div class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 pl-1">Acquisition Channels
+                </div>
+                <!-- Channel 1 -->
+                <div class="channel-card">
+                    <div class="channel-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3 class="channel-title">Direct Sales</h3>
+                    <p class="channel-desc">Targeting single-station owners via on-ground sales teams. High-touch,
+                        consultative selling.</p>
+                </div>
+                <!-- Channel 2 -->
+                <div class="channel-card">
+                    <div class="channel-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3 class="channel-title">Distributor Partners</h3>
+                    <p class="channel-desc">Leveraging fuel distribution networks to bundle FUELOPS with fuel supply
+                        contracts.</p>
+                </div>
+            </div>
+            <!-- Arrow -->
+            <div class="arrow-divider">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <!-- Column 2: Conversion Process -->
+            <div class="process-col">
+                <div class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 pl-1">Sales Process</div>
+                <div class="process-line"></div>
+                <!-- Step 1 -->
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Live Data Demo</h4>
+                        <p>Showcasing real-time dashboards from a live reference station.</p>
+                    </div>
+                </div>
+                <!-- Step 2 -->
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Audit &amp; Proposal</h4>
+                        <p>Quick on-site assessment of tank calibration and hardware needs.</p>
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Pilot Deployment</h4>
+                        <p>30-day trial period to prove ROI and leakage reduction.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Arrow -->
+            <div class="arrow-divider">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <!-- Column 3: Campaign -->
+            <div class="campaign-col">
+                <div class="campaign-card">
+                    <div class="campaign-tag">Launch Campaign</div>
+                    <div class="campaign-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="campaign-title">"Digitize Your Station in 7 Days"</h3>
+                    <p class="campaign-desc">
+                        A promise of rapid deployment with zero operational downtime. From manual books to digital
+                        dashboard in one week.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- Footer -->
+        <div class="absolute bottom-8 right-12 flex items-center gap-4 z-20">
+            <div class="h-[1px] w-12 bg-slate-700"></div>
+            <span class="text-slate-600 font-mono text-sm">17</span>
+        </div>
+    </div>
+<script src='navigation.js'></script>
+</body>
+
+</html>
+
